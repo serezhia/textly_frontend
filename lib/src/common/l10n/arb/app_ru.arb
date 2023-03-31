@@ -1,0 +1,7 @@
+{
+    "@@locale": "ru",
+    "nameApp": "Textly",
+    "@nameApp": {
+        "description": "Название приложения"
+    }
+}

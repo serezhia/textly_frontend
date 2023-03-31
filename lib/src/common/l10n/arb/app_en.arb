@@ -1,0 +1,7 @@
+{
+    "@@locale": "en",
+    "nameApp": "Textly",
+    "@nameApp": {
+        "description": "Name app"
+    }
+}
