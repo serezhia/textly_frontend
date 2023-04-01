@@ -18,7 +18,9 @@ abstract class SentryUtil {
               ..maxBreadcrumbs = 100
               ..attachStacktrace = true
               ..tracesSampleRate = 1
-              ..debug = false,
+              ..debug = false
+            // ..integrations[]
+            ,
           );
           _loggerToSentryBreadcrumb();
           appRunner();

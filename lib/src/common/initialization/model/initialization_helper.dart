@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:l/l.dart';
 import 'package:platform_info/platform_info.dart';
@@ -11,6 +12,8 @@ import 'package:textly/src/common/initialization/model/repository_storage.dart';
 import 'package:textly/src/common/migration/migration_helper.dart';
 import 'package:textly/src/common/model/app_metadata.dart';
 import 'package:textly/src/common/utils/screen_util.dart';
+import 'package:textly/src/feature/auth/data/auth_repo.dart';
+import 'package:textly/src/feature/auth/data/user_data_provider.dart';
 
 class InitializationHelper {
   bool _isInitialized = false;
@@ -71,6 +74,15 @@ final Map<
   InitializationProgress progress,
 )> _initializationSteps = <String,
     FutureOr<InitializationProgress> Function(InitializationProgress progress)>{
+  'Create dio': (store) async {
+    final dio = Dio(
+      BaseOptions(
+        baseUrl: apiDomen,
+      ),
+    );
+
+    return store.copyWith(dio: dio);
+  },
   'Creating app metadata': (store) async {
     final screenSize = ScreenUtil.screenSize();
     final appMetadata = AppMetadata(
@@ -103,6 +115,17 @@ final Map<
           sharedPreferences: sharedPreferences,
         ),
       ),
+  'Creating UserDataProvider': (store) => store.copyWith(
+        userDataProvider: SharedPrefsUserDataProvider(store.sharedPreferences!),
+      ),
+  'Creating AuthRepository': (store) async {
+    final authRepo = ApiAuthRepository(
+      firstFetchUser: await store.userDataProvider!.getFromStorage(),
+      dio: store.dio!,
+      userDataProvider: store.userDataProvider!,
+    );
+    return store.copyWith(authRepository: authRepo);
+  },
   'Migrate app from previous version': (store) async {
     final sharedPrefs = store.sharedPreferences;
     if (sharedPrefs == null) return store;

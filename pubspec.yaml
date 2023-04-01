@@ -8,9 +8,11 @@ environment:
 
 dependencies:
   bloc: ^8.1.1
+  bloc_concurrency: ^0.2.1
   sentry_flutter: ^7.4.0
   stack_trace: ^1.11.0
   shared_preferences: ^2.0.20
+  jwt_decoder: ^2.0.1
   platform_info: ^3.2.0
   flutter:
     sdk: flutter
@@ -23,6 +25,11 @@ dependencies:
   l: ^3.2.0
   freezed_annotation: ^2.2.0
   json_annotation: ^4.8.0
+  textly_core:
+    git:
+      url: git@github.com:serezhia/textly_core.git
+      ref: dev
+  dio: ^5.1.1
 
 dev_dependencies:
   bloc_test: ^9.1.1
