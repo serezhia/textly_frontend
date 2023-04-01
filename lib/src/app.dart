@@ -7,6 +7,7 @@ import 'package:textly/src/common/initialization/model/initialization_helper.dar
 import 'package:textly/src/common/initialization/model/repository_storage.dart';
 import 'package:textly/src/common/widgets/material_context.dart';
 import 'package:textly/src/common/widgets/repostiory_scope.dart';
+import 'package:textly/src/feature/auth/widget/auth_scope.dart';
 
 @immutable
 class App extends StatelessWidget {
@@ -115,6 +116,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) => RepositoryScope(
         repositoryStorage: _repositoryStorage,
-        builder: (context) => const AppMaterialContext(),
+        builder: (context) => const AuthenticationScope(
+          child: AppMaterialContext(),
+        ),
       );
 }
