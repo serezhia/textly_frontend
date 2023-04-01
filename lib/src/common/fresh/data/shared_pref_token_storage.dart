@@ -1,5 +1,4 @@
 import 'package:fresh/fresh.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:textly/src/feature/auth/data/user_data_provider.dart';
 import 'package:textly/src/feature/auth/model/user_model.dart';
 import 'package:textly_core/textly_core.dart';

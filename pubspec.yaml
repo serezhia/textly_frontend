@@ -33,6 +33,8 @@ dependencies:
     path: ./packages/fresh
   textly_ui:
     path: ./packages/textly_ui
+  go_router:
+    path: ./packages/go_router
   dio: ^5.1.1
 
 dev_dependencies:
