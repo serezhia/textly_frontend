@@ -152,7 +152,7 @@ class AuthenticationBLoC extends Bloc<AuthenticationEvent, AuthenticationState>
       l.w('Во время аутентификации произошла ошибка: $error', stackTrace);
       emit(
         const AuthenticationState.error(
-          message: 'An error occurred during authentication',
+          message: 'Error signin',
         ),
       );
       emit(AuthenticationState.fromUser(const NotAuthenticatedUser()));
@@ -171,7 +171,7 @@ class AuthenticationBLoC extends Bloc<AuthenticationEvent, AuthenticationState>
       l.w('Во время разлогина произошла ошибка');
       emit(
         const AuthenticationState.error(
-          message: 'An error occurred during log out',
+          message: 'Error logout',
         ),
       );
       emit(AuthenticationState.fromUser(const NotAuthenticatedUser()));
@@ -193,7 +193,7 @@ class AuthenticationBLoC extends Bloc<AuthenticationEvent, AuthenticationState>
       l.w('Во время отправки кода произошла ошибка');
       emit(
         const AuthenticationState.error(
-          message: 'An error occurred during log out',
+          message: 'Error send code',
         ),
       );
       emit(AuthenticationState.fromUser(const NotAuthenticatedUser()));
@@ -205,28 +205,30 @@ class AuthenticationBLoC extends Bloc<AuthenticationEvent, AuthenticationState>
     Emitter<AuthenticationState> emit,
     _CreateProfileEvent event,
   ) async {
-    if (state.isNotAuthenticated) return;
+    if (state.isNotAuthenticated || state.user.userId == null) return;
 
     l.vvvvvv('Начат процесс создания аккаунта');
     emit(AuthenticationState.progress(user: state.user));
     try {
       final user = await _authenticationRepository.createProfile(
         profile: Profile(
-          userId: state.user.userId ?? -1,
+          userId: state.user.userId!,
           username: event.username,
           profileName: event.nameProfile,
           avatar: event.avatar,
           backgroundColor: event.backgroundColor,
+          description: event.description,
           isPremium: false,
           isDelete: false,
         ),
       );
       emit(AuthenticationState.fromUser(user));
+      l.vvvvvv('Профиль для аккаунта создан ');
     } on Object {
       l.w('Во время создания аккаунта произошла ошибка');
       emit(
         const AuthenticationState.error(
-          message: 'An error occurred during log out',
+          message: 'Error create account',
         ),
       );
       emit(

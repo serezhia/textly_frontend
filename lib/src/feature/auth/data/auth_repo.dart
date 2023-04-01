@@ -1,11 +1,14 @@
 // ignore_for_file: cast_nullable_to_non_nullable
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:fresh/fresh.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:l/l.dart';
 import 'package:textly/src/common/consts/config_app.dart';
+import 'package:textly/src/common/fresh/data/shared_pref_token_storage.dart';
 import 'package:textly/src/feature/auth/data/user_data_provider.dart';
 import 'package:textly/src/feature/auth/model/user_model.dart';
 import 'package:textly_core/textly_core.dart';
@@ -50,6 +53,7 @@ class ApiAuthRepository implements IAuthRepository {
   /// Разлогиниться
   @override
   Future<void> logOut() async {
+    dio.interceptors.clear();
     await userDataProvider.deleteFromStorage();
   }
 
@@ -63,10 +67,12 @@ class ApiAuthRepository implements IAuthRepository {
 
       await dio.post<dynamic>(
         '$apiDomen/auth/code',
-        data: {
-          'mail': email,
-          'region': 'ru',
-        },
+        data: jsonEncode(
+          {
+            'mail': email,
+            'region': 'ru',
+          },
+        ),
       );
 
       l.vvvvvv('Код уcпешно отправлен');
@@ -76,23 +82,50 @@ class ApiAuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<UserEntity> createProfile({required Profile profile}) {
-    // TODO: implement createProfile
-    throw UnimplementedError();
+  Future<UserEntity> createProfile({required Profile profile}) async {
+    final response = await dio.post<Map<String, Object?>>(
+      '$apiDomen/profiles/profile',
+      data: jsonEncode(
+        {
+          'username': profile.username,
+          'profile_name': profile.profileName,
+          'avatar': profile.avatar,
+          'background_color': profile.backgroundColor,
+          'description': profile.description,
+        },
+      ),
+    );
+    if (response.data?['status'] == 'Success') {
+      final user = await userDataProvider.getFromStorage();
+      final newUser = UserEntity.authenticated(
+        userId: user.userId!,
+        email: user.email!,
+        tokens: user.tokens!,
+        withProfile: true,
+      );
+      await userDataProvider.updateInStorage(newUser);
+      return newUser;
+    } else {
+      throw Exception(response.data?['message']);
+    }
   }
 
   @override
   Future<bool> isProfileExists({required int userId}) async {
-    final response = await dio.get<Map<String, Object?>>(
-      '$apiDomen/profiles/profile/$userId',
-    );
-    if (response.data == null || response.data?['status'] == null) {
-      return false;
-    }
+    try {
+      final response = await dio.get<Map<String, Object?>>(
+        '$apiDomen/profiles/profile/$userId',
+      );
+      if (response.data == null || response.data?['status'] == null) {
+        return false;
+      }
 
-    if (response.data!['status'] as String == 'Success') {
-      return true;
-    } else {
+      if (response.data!['status'] as String == 'Success') {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
       return false;
     }
   }
@@ -107,10 +140,12 @@ class ApiAuthRepository implements IAuthRepository {
 
       final response = await dio.post<Map<String, Object?>>(
         '$apiDomen/auth/signin',
-        data: {
-          'mail': email,
-          'code': code,
-        },
+        data: jsonEncode(
+          {
+            'mail': email,
+            'code': code,
+          },
+        ),
       );
 
       l.vvvvvv('Успешный вход');
@@ -135,7 +170,25 @@ class ApiAuthRepository implements IAuthRepository {
       );
 
       await userDataProvider.updateInStorage(user);
-
+      l.vvvvvv('Добавление интерцептора для входа');
+      dio.interceptors.add(
+        Fresh.oAuth2(
+          tokenStorage: SharedPrefsTokenStorage(userDataProvider),
+          refreshToken: (token, client) async {
+            final response = await client.post<Map<String, Object?>>(
+              '$apiDomen/auth/refresh',
+              options: Options(
+                headers: {
+                  'Authorization': 'Bearer ${token!.refreshToken}',
+                },
+              ),
+            );
+            return OAuth2Token.fromJson(
+              response.data!['data'] as Map<String, Object?>,
+            );
+          },
+        ),
+      );
       return user;
     } catch (e) {
       rethrow;

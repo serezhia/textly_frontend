@@ -134,6 +134,25 @@ class AuthenticationScope extends StatefulWidget {
             ),
           );
 
+  /// создать профиль
+  static void createProfile(
+    BuildContext context,
+    String username,
+    String avatar,
+    String backgroundColor,
+    String nameProfile,
+    String description,
+  ) =>
+      _of(context)?.bloc.add(
+            AuthenticationEvent.createProfile(
+              username: username,
+              avatar: avatar,
+              backgroundColor: backgroundColor,
+              nameProfile: nameProfile,
+              description: description,
+            ),
+          );
+
   /// Разлогиниться
   static void logOut(BuildContext context) =>
       _of(context)?.bloc.add(const AuthenticationEvent.logOut());

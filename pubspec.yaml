@@ -29,6 +29,10 @@ dependencies:
     git:
       url: git@github.com:serezhia/textly_core.git
       ref: dev
+  fresh:
+    path: ./packages/fresh
+  textly_ui:
+    path: ./packages/textly_ui
   dio: ^5.1.1
 
 dev_dependencies:

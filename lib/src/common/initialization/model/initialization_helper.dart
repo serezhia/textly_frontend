@@ -2,18 +2,21 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:fresh/fresh.dart';
 import 'package:l/l.dart';
 import 'package:platform_info/platform_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:textly/src/common/consts/config_app.dart';
+import 'package:textly/src/common/fresh/data/shared_pref_token_storage.dart';
 
 import 'package:textly/src/common/initialization/model/initialization_progress.dart';
 import 'package:textly/src/common/initialization/model/repository_storage.dart';
 import 'package:textly/src/common/migration/migration_helper.dart';
 import 'package:textly/src/common/model/app_metadata.dart';
-import 'package:textly/src/common/utils/screen_util.dart';
 import 'package:textly/src/feature/auth/data/auth_repo.dart';
 import 'package:textly/src/feature/auth/data/user_data_provider.dart';
+import 'package:textly_core/textly_core.dart';
+import 'package:textly_ui/textly_ui.dart';
 
 class InitializationHelper {
   bool _isInitialized = false;
@@ -74,15 +77,6 @@ final Map<
   InitializationProgress progress,
 )> _initializationSteps = <String,
     FutureOr<InitializationProgress> Function(InitializationProgress progress)>{
-  'Create dio': (store) async {
-    final dio = Dio(
-      BaseOptions(
-        baseUrl: apiDomen,
-      ),
-    );
-
-    return store.copyWith(dio: dio);
-  },
   'Creating app metadata': (store) async {
     final screenSize = ScreenUtil.screenSize();
     final appMetadata = AppMetadata(
@@ -118,6 +112,35 @@ final Map<
   'Creating UserDataProvider': (store) => store.copyWith(
         userDataProvider: SharedPrefsUserDataProvider(store.sharedPreferences!),
       ),
+  'Create dio': (store) async {
+    final dio = Dio(
+      BaseOptions(
+        baseUrl: apiDomen,
+      ),
+    );
+
+    if ((await store.userDataProvider!.getFromStorage()).tokens != null) {
+      dio.interceptors.add(
+        Fresh.oAuth2(
+          tokenStorage: SharedPrefsTokenStorage(store.userDataProvider!),
+          refreshToken: (token, client) async {
+            final response = await client.post<Map<String, Object?>>(
+              '$apiDomen/auth/refresh',
+              options: Options(
+                headers: {'Authorization': 'Bearer ${token!.refreshToken}'},
+              ),
+            );
+            return OAuth2Token.fromJson(
+              // ignore: cast_nullable_to_non_nullable
+              response.data!['data'] as Map<String, Object?>,
+            );
+          },
+        ),
+      );
+    }
+
+    return store.copyWith(dio: dio);
+  },
   'Creating AuthRepository': (store) async {
     final authRepo = ApiAuthRepository(
       firstFetchUser: await store.userDataProvider!.getFromStorage(),
