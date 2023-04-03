@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 abstract class ScreenUtil {
   ScreenUtil._();
 
-  /// Get current screen logical size representation
+  /// Get screen logical size representation
   ///
   /// extra small - ~320..599 dp, 4 column (phone)
   /// small - 600..1023 dp, 8 column (tablet)

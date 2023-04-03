@@ -50,3 +50,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+
+  fonts:
+    - family: Noto Emoji
+      fonts:
+        - asset: assets/fonts/NotoColorEmoji-Regular.ttf

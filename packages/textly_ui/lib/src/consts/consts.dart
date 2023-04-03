@@ -2,8 +2,6 @@
 
 import 'package:flutter/material.dart';
 
-const double heightAppBar = 60;
-const colorAppBar = Colors.blue;
 const shortLogo = Text(
   'Te',
   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),

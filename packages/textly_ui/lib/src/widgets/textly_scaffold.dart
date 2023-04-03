@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:textly_ui/src/consts/consts.dart';
+import 'package:textly_ui/src/theme/textly_scaffold_theme.dart';
+import 'package:textly_ui/textly_ui.dart';
 
 class TextlyScaffold extends StatefulWidget {
   const TextlyScaffold({
@@ -11,14 +13,15 @@ class TextlyScaffold extends StatefulWidget {
     this.buttomNavigationBar,
     this.navigationRail,
     this.rightSide,
-    required this.isRootScreen,
+    this.isRootScreen = false,
+    this.theme,
   });
 
   final bool isRootScreen;
 
-  final Widget? appBar;
+  final TextlyAppBar? appBar;
   final Widget body;
-
+  final TextlyScafoldTheme? theme;
   final Widget? buttomNavigationBar;
   final Widget? navigationRail;
 
@@ -36,9 +39,10 @@ class _TextlyScaffoldState extends State<TextlyScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: widget.theme?.backgroundColor,
       body: LayoutBuilder(
         builder: (context, contraints) {
-          if (contraints.maxWidth >= 1200) {
+          if (contraints.maxWidth >= ScreenSize.extraLarge.min) {
             return _XLargeScaffold(
               isRootScreen: widget.isRootScreen,
               bodyKey: bodyKey,
@@ -48,7 +52,7 @@ class _TextlyScaffoldState extends State<TextlyScaffold> {
               rightSide: widget.rightSide,
               rightBarKey: rightBarKey,
             );
-          } else if (contraints.maxWidth >= 922) {
+          } else if (contraints.maxWidth >= ScreenSize.large.min) {
             return _LargeScaffold(
               isRootScreen: widget.isRootScreen,
               bodyKey: bodyKey,
@@ -58,7 +62,7 @@ class _TextlyScaffoldState extends State<TextlyScaffold> {
               rightSide: widget.rightSide,
               rightBarKey: rightBarKey,
             );
-          } else if (contraints.maxWidth >= 800) {
+          } else if (contraints.maxWidth >= ScreenSize.medium.min) {
             return _MediumScaffold(
               bodyKey: bodyKey,
               appBar: widget.appBar,
@@ -68,13 +72,15 @@ class _TextlyScaffoldState extends State<TextlyScaffold> {
               rightBarKey: rightBarKey,
               isRootScreen: widget.isRootScreen,
             );
-          } else if (contraints.maxWidth >= 576) {
+          } else if (contraints.maxWidth >= ScreenSize.small.min) {
             return _SmallScaffold(
               bodyKey: bodyKey,
               appBar: widget.appBar,
               body: widget.body,
               navigationRail: widget.navigationRail,
               isRootScreen: widget.isRootScreen,
+              rightSide: widget.rightSide,
+              rightSideKey: rightBarKey,
             );
           } else {
             return _XSmallScaffold(
@@ -102,7 +108,7 @@ class _XLargeScaffold extends StatelessWidget {
   });
   final GlobalKey bodyKey;
   final GlobalKey rightBarKey;
-  final Widget? appBar;
+  final TextlyAppBar? appBar;
   final Widget body;
   final Widget? navigationRail;
   final Widget? rightSide;
@@ -112,7 +118,11 @@ class _XLargeScaffold extends StatelessWidget {
     if (isRootScreen) {
       return Stack(
         children: [
-          if (isRootScreen) Container(height: heightAppBar, color: colorAppBar),
+          if (isRootScreen && appBar != null)
+            Container(
+              height: appBar?.heightAppBar,
+              color: appBar?.colorAppBar,
+            ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -124,12 +134,13 @@ class _XLargeScaffold extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      const SizedBox(
-                        height: heightAppBar,
-                        child: Center(
-                          child: longLogo,
+                      if (appBar != null)
+                        SizedBox(
+                          height: appBar?.heightAppBar,
+                          child: const Center(
+                            child: longLogo,
+                          ),
                         ),
-                      ),
                       Expanded(child: navigationRail!),
                     ],
                   ),
@@ -139,11 +150,13 @@ class _XLargeScaffold extends StatelessWidget {
                 constraints: const BoxConstraints(maxWidth: 600),
                 child: Column(
                   children: [
-                    ConstrainedBox(
-                      constraints:
-                          const BoxConstraints(maxHeight: heightAppBar),
-                      child: appBar,
-                    ),
+                    if (appBar != null)
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxHeight: appBar?.heightAppBar ?? double.infinity,
+                        ),
+                        child: appBar?.appBar,
+                      ),
                     Expanded(
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 600),
@@ -161,9 +174,10 @@ class _XLargeScaffold extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      Container(
-                        height: heightAppBar,
-                      ),
+                      if (appBar != null)
+                        SizedBox(
+                          height: appBar?.heightAppBar,
+                        ),
                       Expanded(
                         child: KeyedSubtree(
                           key: rightBarKey,
@@ -183,8 +197,10 @@ class _XLargeScaffold extends StatelessWidget {
         children: [
           if (appBar != null)
             ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: heightAppBar),
-              child: appBar,
+              constraints: BoxConstraints(
+                maxHeight: appBar?.heightAppBar ?? double.infinity,
+              ),
+              child: appBar?.appBar,
             ),
           Expanded(
             child: Row(
@@ -216,7 +232,7 @@ class _LargeScaffold extends StatelessWidget {
     required this.isRootScreen,
   });
 
-  final Widget? appBar;
+  final TextlyAppBar? appBar;
   final Widget body;
   final Widget? navigationRail;
   final GlobalKey bodyKey;
@@ -228,7 +244,11 @@ class _LargeScaffold extends StatelessWidget {
     if (isRootScreen) {
       return Stack(
         children: [
-          if (isRootScreen) Container(height: heightAppBar, color: colorAppBar),
+          if (isRootScreen && appBar != null)
+            Container(
+              height: appBar?.heightAppBar,
+              color: appBar?.colorAppBar,
+            ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -239,25 +259,29 @@ class _LargeScaffold extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      const SizedBox(
-                        height: heightAppBar,
-                        child: Center(
-                          child: longLogo,
+                      if (appBar != null)
+                        SizedBox(
+                          height: appBar?.heightAppBar,
+                          child: const Center(
+                            child: longLogo,
+                          ),
                         ),
-                      ),
                       Expanded(child: navigationRail!),
                     ],
                   ),
                 ),
               const SizedBox(width: 10),
-              Expanded(
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 600),
                 child: Column(
                   children: [
-                    ConstrainedBox(
-                      constraints:
-                          const BoxConstraints(maxHeight: heightAppBar),
-                      child: appBar,
-                    ),
+                    if (appBar != null)
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxHeight: appBar?.heightAppBar ?? double.infinity,
+                        ),
+                        child: appBar?.appBar,
+                      ),
                     Expanded(
                       child: KeyedSubtree(key: bodyKey, child: body),
                     ),
@@ -272,9 +296,10 @@ class _LargeScaffold extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      Container(
-                        height: heightAppBar,
-                      ),
+                      if (appBar != null)
+                        SizedBox(
+                          height: appBar?.heightAppBar,
+                        ),
                       Expanded(
                         child: KeyedSubtree(
                           key: rightBarKey,
@@ -294,8 +319,10 @@ class _LargeScaffold extends StatelessWidget {
         children: [
           if (appBar != null)
             ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: heightAppBar),
-              child: appBar,
+              constraints: BoxConstraints(
+                maxHeight: appBar?.heightAppBar ?? double.infinity,
+              ),
+              child: appBar?.appBar,
             ),
           Expanded(
             child: Row(
@@ -327,7 +354,7 @@ class _MediumScaffold extends StatelessWidget {
     required this.isRootScreen,
   });
   final GlobalKey bodyKey;
-  final Widget? appBar;
+  final TextlyAppBar? appBar;
   final Widget body;
   final Widget? navigationRail;
   final Widget? rightSide;
@@ -337,76 +364,109 @@ class _MediumScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isRootScreen) {
-      return Stack(
-        children: [
-          if (isRootScreen) Container(height: heightAppBar, color: colorAppBar),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (navigationRail != null)
-                ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: 75,
-                  ),
-                  child: Column(
-                    children: [
-                      const SizedBox(
-                        height: heightAppBar,
-                        child: Center(
-                          child: shortLogo,
-                        ),
-                      ),
-                      Expanded(child: navigationRail!),
-                    ],
-                  ),
-                ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  children: [
-                    ConstrainedBox(
-                      constraints:
-                          const BoxConstraints(maxHeight: heightAppBar),
-                      child: appBar,
-                    ),
-                    Expanded(
-                      child: KeyedSubtree(key: bodyKey, child: body),
-                    ),
-                  ],
-                ),
+      return LayoutBuilder(
+        builder: (context, constraints) => Stack(
+          children: [
+            if (isRootScreen && appBar != null)
+              Container(
+                height: appBar?.heightAppBar,
+                color: appBar?.colorAppBar,
               ),
-              const SizedBox(width: 10),
-              if (rightSide != null)
-                ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: 300,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (navigationRail != null)
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxWidth: 200,
+                    ),
+                    child: Column(
+                      children: [
+                        if (appBar != null)
+                          SizedBox(
+                            height: appBar?.heightAppBar,
+                            child: const Center(
+                              child: longLogo,
+                            ),
+                          ),
+                        Expanded(child: navigationRail!),
+                      ],
+                    ),
                   ),
-                  child: Column(
-                    children: [
-                      Container(
-                        height: heightAppBar,
-                      ),
-                      Expanded(
-                        child: KeyedSubtree(
-                          key: rightBarKey,
-                          child: rightSide!,
+                const SizedBox(width: 10),
+                if (constraints.maxWidth >= 1150)
+                  SizedBox(
+                    width: 600,
+                    child: Column(
+                      children: [
+                        if (appBar != null)
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxHeight:
+                                  appBar?.heightAppBar ?? double.infinity,
+                            ),
+                            child: appBar?.appBar,
+                          ),
+                        Expanded(
+                          child: KeyedSubtree(key: bodyKey, child: body),
                         ),
-                      )
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              const SizedBox(width: 10),
-            ],
-          ),
-        ],
+                if (constraints.maxWidth < 1150)
+                  Expanded(
+                    child: Column(
+                      children: [
+                        if (appBar != null)
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxHeight:
+                                  appBar?.heightAppBar ?? double.infinity,
+                            ),
+                            child: appBar?.appBar,
+                          ),
+                        Expanded(
+                          child: KeyedSubtree(key: bodyKey, child: body),
+                        ),
+                      ],
+                    ),
+                  ),
+                const SizedBox(width: 10),
+                if (rightSide != null)
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxWidth: 300,
+                    ),
+                    child: Column(
+                      children: [
+                        if (appBar != null)
+                          SizedBox(
+                            height: appBar?.heightAppBar,
+                          ),
+                        Expanded(
+                          child: KeyedSubtree(
+                            key: rightBarKey,
+                            child: rightSide!,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                const SizedBox(width: 10),
+              ],
+            ),
+          ],
+        ),
       );
     } else {
       return Column(
         children: [
           if (appBar != null)
             ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: heightAppBar),
-              child: appBar,
+              constraints: BoxConstraints(
+                maxHeight: appBar?.heightAppBar ?? double.infinity,
+              ),
+              child: appBar?.appBar,
             ),
           Expanded(
             child: Row(
@@ -434,10 +494,14 @@ class _SmallScaffold extends StatelessWidget {
     this.navigationRail,
     required this.bodyKey,
     required this.isRootScreen,
+    required this.rightSide,
+    required this.rightSideKey,
   });
-  final Widget? appBar;
+  final TextlyAppBar? appBar;
   final Widget body;
   final Widget? navigationRail;
+  final Widget? rightSide;
+  final GlobalKey rightSideKey;
   final GlobalKey bodyKey;
   final bool isRootScreen;
   @override
@@ -445,51 +509,83 @@ class _SmallScaffold extends StatelessWidget {
     if (isRootScreen) {
       return Stack(
         children: [
-          Container(height: heightAppBar, color: colorAppBar),
-          Row(
-            children: [
-              if (navigationRail != null)
-                ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: 75,
+          if (isRootScreen && appBar != null)
+            Container(
+              height: appBar?.heightAppBar,
+              color: appBar?.colorAppBar,
+            ),
+          LayoutBuilder(
+            builder: (context, constraints) => Row(
+              children: [
+                if (navigationRail != null)
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxWidth: 75,
+                    ),
+                    child: Column(
+                      children: [
+                        if (appBar != null)
+                          SizedBox(
+                            height: appBar?.heightAppBar,
+                            child: const Center(
+                              child: shortLogo,
+                            ),
+                          ),
+                        Expanded(child: navigationRail!),
+                      ],
+                    ),
                   ),
+                const SizedBox(width: 10),
+                Expanded(
                   child: Column(
                     children: [
-                      const SizedBox(
-                        height: heightAppBar,
-                        child: Center(
-                          child: shortLogo,
+                      if (appBar != null)
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxHeight: appBar?.heightAppBar ?? double.infinity,
+                          ),
+                          child: appBar?.appBar,
+                        ),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: KeyedSubtree(key: bodyKey, child: body),
+                            ),
+                          ],
                         ),
                       ),
-                      Expanded(child: navigationRail!),
                     ],
                   ),
                 ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  children: [
-                    if (appBar != null)
-                      ConstrainedBox(
-                        constraints:
-                            const BoxConstraints(maxHeight: heightAppBar),
-                        child: appBar,
+                const SizedBox(width: 10),
+                if (rightSide != null)
+                  Visibility(
+                    visible: constraints.maxWidth - 250 >= 500 + 20 + 50,
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        maxWidth: 250,
                       ),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      child: Column(
                         children: [
+                          if (appBar != null)
+                            SizedBox(
+                              height: appBar?.heightAppBar,
+                            ),
                           Expanded(
-                            child: KeyedSubtree(key: bodyKey, child: body),
-                          ),
+                            child: KeyedSubtree(
+                              key: rightSideKey,
+                              child: rightSide!,
+                            ),
+                          )
                         ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 10),
-            ],
+                  ),
+                const SizedBox(width: 10),
+              ],
+            ),
           ),
         ],
       );
@@ -498,8 +594,10 @@ class _SmallScaffold extends StatelessWidget {
         children: [
           if (appBar != null)
             ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: heightAppBar),
-              child: appBar,
+              constraints: BoxConstraints(
+                maxHeight: appBar?.heightAppBar ?? double.infinity,
+              ),
+              child: appBar?.appBar,
             ),
           Expanded(
             child: Row(
@@ -526,7 +624,7 @@ class _XSmallScaffold extends StatelessWidget {
     this.appBar,
   });
   final GlobalKey bodyKey;
-  final Widget? appBar;
+  final TextlyAppBar? appBar;
   final Widget body;
   final Widget? bottomNavigationBar;
 
@@ -534,15 +632,19 @@ class _XSmallScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(height: heightAppBar, color: colorAppBar),
+        if (appBar != null)
+          Container(
+            height: appBar?.heightAppBar,
+            color: appBar?.colorAppBar,
+          ),
         Column(
           children: [
             if (appBar != null)
               ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxHeight: heightAppBar + MediaQuery.of(context).padding.top,
+                  maxHeight: appBar?.heightAppBar ?? double.infinity,
                 ),
-                child: appBar,
+                child: appBar?.appBar,
               ),
             Expanded(
               child: Row(

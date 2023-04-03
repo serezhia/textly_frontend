@@ -4,9 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:textly/src/common/l10n/l10n.dart';
+import 'package:textly/src/common/router/router.dart';
 import 'package:textly/src/common/widgets/repostiory_scope.dart';
 import 'package:textly/src/feature/auth/bloc/auth_bloc.dart';
 import 'package:textly/src/feature/auth/widget/auth_scope.dart';
+import 'package:textly/src/feature/theme/dart_theme.dart';
+import 'package:textly/src/feature/theme/light_theme.dart';
+import 'package:textly_ui/textly_ui.dart';
 
 @immutable
 class AppMaterialContext extends StatefulWidget {
@@ -19,20 +23,29 @@ class AppMaterialContext extends StatefulWidget {
 }
 
 class _AppMaterialContextState extends State<AppMaterialContext> {
+  late MainRouter mainRouter;
+  @override
+  void initState() {
+    mainRouter = MainRouter();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      localizationsDelegates: [
+    return MaterialApp.router(
+      theme: lightTheme,
+      darkTheme: dartTheme,
+      localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [
+      supportedLocales: const [
         Locale('en'), // English
         Locale('ru'), // Russian
       ],
-      home: TestWidget(),
+      routerConfig: mainRouter.goRouter,
     );
   }
 }
@@ -51,10 +64,42 @@ class _TestWidgetState extends State<TestWidget> {
   final emailController = TextEditingController();
 
   bool codeSented = false;
+  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return TextlyScaffold(
+      appBar: TextlyAppBar(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+        ),
+      ),
+      navigationRail: SideNavigationMenu(
+        currentIndex: currentIndex,
+        items: [
+          NavigationMenuItem(
+            lable: 'Главная',
+            icon: const Text(
+              '👋',
+              style: TextStyle(fontFamilyFallback: ['Noto Color Emoji']),
+            ),
+          ),
+          NavigationMenuItem(lable: 'Не главная', icon: const Text('🎲')),
+        ],
+        onTap: (index) {
+          currentIndex = index;
+          setState(() {});
+        },
+      ),
+      rightSide: Column(
+        children: const [
+          Placeholder(
+            fallbackHeight: 200,
+          )
+        ],
+      ),
+      isRootScreen: true,
       body: BlocBuilder<AuthenticationBLoC, AuthenticationState>(
         builder: (context, state) => Center(
           child: Column(
