@@ -46,6 +46,7 @@ class _AppMaterialContextState extends State<AppMaterialContext> {
         Locale('ru'), // Russian
       ],
       routerConfig: mainRouter.goRouter,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

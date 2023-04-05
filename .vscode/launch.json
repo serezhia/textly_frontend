@@ -19,7 +19,7 @@
       ]
     },
     {
-      "name": "Launch staging",
+      "name": "Launch Staging",
       "request": "launch",
       "type": "dart",
       "program": "lib/main/main_staging.dart",
@@ -31,7 +31,7 @@
       ]
     },
     {
-      "name": "Launch production",
+      "name": "Launch Production",
       "request": "launch",
       "type": "dart",
       "program": "lib/main/main_production.dart",
@@ -40,6 +40,21 @@
         "production",
         "--target",
         "lib/main/main_production.dart"
+      ]
+    },
+    {
+      "name": "Launch Web production",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main/main_production.dart",
+      "args": [
+        "--flavor",
+        "production",
+        "--target",
+        "lib/main/main_production.dart",
+        "--web-browser-flag",
+        "--disable-web-security",
+        "--release",
       ]
     }
   ]

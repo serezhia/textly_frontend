@@ -1,18 +1,21 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:flutter/material.dart';
+import 'package:textly_ui/src/widgets/navigation_menu_item.dart';
 
 class SideNavigationMenu extends StatefulWidget {
   const SideNavigationMenu({
     required this.items,
     required this.onTap,
     required this.currentIndex,
+    this.fab,
     super.key,
   });
 
   final List<NavigationMenuItem> items;
   final ValueChanged<int>? onTap;
   final int currentIndex;
+  final Widget? fab;
 
   @override
   State<SideNavigationMenu> createState() => _SideNavigationMenuState();
@@ -20,7 +23,7 @@ class SideNavigationMenu extends StatefulWidget {
 
 class _SideNavigationMenuState extends State<SideNavigationMenu> {
   List<Widget> _createTiles(double maxWidth) {
-    final tiles = <Widget>[];
+    final tiles = <_SideNavigationMenuItemWidget>[];
     for (var i = 0; i < widget.items.length; i++) {
       tiles.add(
         _SideNavigationMenuItemWidget(
@@ -39,33 +42,24 @@ class _SideNavigationMenuState extends State<SideNavigationMenu> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (context, constraints) {
-        if (constraints.maxWidth >= 200) {
-          return SizedBox(
-            width: 200,
-            child: Column(children: _createTiles(constraints.maxWidth)),
-          );
-        } else {
-          return SizedBox(
-            width: 50,
-            child: Column(children: _createTiles(constraints.maxWidth)),
-          );
-        }
-      },
+      builder: (context, constraints) => SizedBox(
+        width: constraints.maxWidth >= 200 ? 200 : 50,
+        child: Column(
+          children: [
+            ..._createTiles(constraints.maxWidth),
+            if (widget.fab != null)
+              Padding(
+                padding: EdgeInsets.only(
+                  left: constraints.maxWidth >= 200 ? 35 : 0,
+                  top: 30,
+                ),
+                child: widget.fab,
+              ),
+          ],
+        ),
+      ),
     );
   }
-}
-
-class NavigationMenuItem {
-  NavigationMenuItem({
-    required this.lable,
-    required this.icon,
-    this.location,
-  });
-
-  final String lable;
-  final Widget icon;
-  final String? location;
 }
 
 class _SideNavigationMenuItemWidget extends StatelessWidget {
@@ -86,23 +80,38 @@ class _SideNavigationMenuItemWidget extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 5),
+        padding: EdgeInsets.only(left: isExpanded ? 35 : 0, top: 30),
         child: isExpanded
             ? Row(
                 children: [
-                  navigationMenuItem.icon,
+                  Opacity(
+                    opacity: isSelected ? 1 : 0.3,
+                    child: DefaultTextStyle(
+                      style: const TextStyle(
+                        fontSize: 20,
+                      ),
+                      child: navigationMenuItem.icon,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
                   Text(
                     navigationMenuItem.lable,
                     style: TextStyle(
                       color: isSelected ? Colors.black : Colors.grey,
                       fontWeight:
-                          isSelected ? FontWeight.bold : FontWeight.normal,
+                          isSelected ? FontWeight.w700 : FontWeight.w500,
+                      fontSize: 20,
+                      fontFamily: 'TT Norms Pro',
                     ),
                   ),
                 ],
               )
-            : Container(
-                child: navigationMenuItem.icon,
+            : DefaultTextStyle(
+                style: const TextStyle(fontSize: 20),
+                child: Opacity(
+                  opacity: isSelected ? 1 : 0.3,
+                  child: navigationMenuItem.icon,
+                ),
               ),
       ),
     );

@@ -36,6 +36,8 @@ dependencies:
   go_router:
     path: ./packages/go_router
   dio: ^5.1.1
+  email_validator: ^2.1.17
+  pin_code_fields: ^7.4.0
 
 dev_dependencies:
   bloc_test: ^9.1.1
@@ -55,3 +57,18 @@ flutter:
     - family: Noto Emoji
       fonts:
         - asset: assets/fonts/NotoColorEmoji-Regular.ttf
+
+    - family: TT Norms Pro
+      fonts:
+        - asset: assets/fonts/ttnorms/TTNormsPro-Regular.ttf
+
+        - asset: assets/fonts/ttnorms/TTNormsPro-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/ttnorms/TTNormsPro-Bold.ttf
+          weight: 600
+        - asset: assets/fonts/ttnorms/TTNormsPro-ExtraBold.ttf
+          weight: 700
+        - asset: assets/fonts/ttnorms/TTNormsPro-Black.ttf
+          weight: 800
+        - asset: assets/fonts/ttnorms/TTNormsPro-ExtraBlack.ttf
+          weight: 900

@@ -20,7 +20,7 @@ abstract class IAuthRepository {
   Future<void> logOut();
 
   /// Залогиниться через почту
-  Future<void> sendEmailCode({
+  Future<UserEntity> sendEmailCode({
     required String email,
   });
 
@@ -59,7 +59,7 @@ class ApiAuthRepository implements IAuthRepository {
 
   /// Залогиниться через почту
   @override
-  Future<void> sendEmailCode({
+  Future<UserEntity> sendEmailCode({
     required String email,
   }) async {
     try {
@@ -76,6 +76,9 @@ class ApiAuthRepository implements IAuthRepository {
       );
 
       l.vvvvvv('Код уcпешно отправлен');
+      final newUser = UserEntity.notAuthenticated(email: email);
+      await userDataProvider.updateInStorage(newUser);
+      return newUser;
     } catch (e) {
       rethrow;
     }

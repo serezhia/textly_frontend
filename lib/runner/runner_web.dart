@@ -6,7 +6,7 @@ import 'package:textly/src/app.dart';
 
 /// Запуск для веба
 Future<void> runApp() {
-  setUrlStrategy(PathUrlStrategy());
+  // setUrlStrategy(PathUrlStrategy());
 
   return App.initializeAndRun(
     onSuccessfulInitialization: (_) {

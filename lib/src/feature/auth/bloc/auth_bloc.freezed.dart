@@ -756,6 +756,8 @@ mixin _$AuthenticationState {
     required TResult Function(UserEntity user) authenticatedWithoutProfile,
     required TResult Function(UserEntity user) authenticatedWithProfile,
     required TResult Function(UserEntity user) progress,
+    required TResult Function(NotAuthenticatedUser user)
+        notAuthenticatedWithCode,
     required TResult Function(NotAuthenticatedUser user) notAuthenticated,
   }) =>
       throw _privateConstructorUsedError;
@@ -765,6 +767,7 @@ mixin _$AuthenticationState {
     TResult? Function(UserEntity user)? authenticatedWithoutProfile,
     TResult? Function(UserEntity user)? authenticatedWithProfile,
     TResult? Function(UserEntity user)? progress,
+    TResult? Function(NotAuthenticatedUser user)? notAuthenticatedWithCode,
     TResult? Function(NotAuthenticatedUser user)? notAuthenticated,
   }) =>
       throw _privateConstructorUsedError;
@@ -774,6 +777,7 @@ mixin _$AuthenticationState {
     TResult Function(UserEntity user)? authenticatedWithoutProfile,
     TResult Function(UserEntity user)? authenticatedWithProfile,
     TResult Function(UserEntity user)? progress,
+    TResult Function(NotAuthenticatedUser user)? notAuthenticatedWithCode,
     TResult Function(NotAuthenticatedUser user)? notAuthenticated,
     required TResult orElse(),
   }) =>
@@ -786,6 +790,8 @@ mixin _$AuthenticationState {
     required TResult Function(_AuthenticatedState value)
         authenticatedWithProfile,
     required TResult Function(_AuthenticationInProgressState value) progress,
+    required TResult Function(_NotAuthenticatedWithCodeState value)
+        notAuthenticatedWithCode,
     required TResult Function(_NotAuthenticatedState value) notAuthenticated,
   }) =>
       throw _privateConstructorUsedError;
@@ -796,6 +802,8 @@ mixin _$AuthenticationState {
         authenticatedWithoutProfile,
     TResult? Function(_AuthenticatedState value)? authenticatedWithProfile,
     TResult? Function(_AuthenticationInProgressState value)? progress,
+    TResult? Function(_NotAuthenticatedWithCodeState value)?
+        notAuthenticatedWithCode,
     TResult? Function(_NotAuthenticatedState value)? notAuthenticated,
   }) =>
       throw _privateConstructorUsedError;
@@ -806,6 +814,8 @@ mixin _$AuthenticationState {
         authenticatedWithoutProfile,
     TResult Function(_AuthenticatedState value)? authenticatedWithProfile,
     TResult Function(_AuthenticationInProgressState value)? progress,
+    TResult Function(_NotAuthenticatedWithCodeState value)?
+        notAuthenticatedWithCode,
     TResult Function(_NotAuthenticatedState value)? notAuthenticated,
     required TResult orElse(),
   }) =>
@@ -913,6 +923,8 @@ class _$_ErrorAuthenticationState extends _ErrorAuthenticationState {
     required TResult Function(UserEntity user) authenticatedWithoutProfile,
     required TResult Function(UserEntity user) authenticatedWithProfile,
     required TResult Function(UserEntity user) progress,
+    required TResult Function(NotAuthenticatedUser user)
+        notAuthenticatedWithCode,
     required TResult Function(NotAuthenticatedUser user) notAuthenticated,
   }) {
     return error(user, message);
@@ -925,6 +937,7 @@ class _$_ErrorAuthenticationState extends _ErrorAuthenticationState {
     TResult? Function(UserEntity user)? authenticatedWithoutProfile,
     TResult? Function(UserEntity user)? authenticatedWithProfile,
     TResult? Function(UserEntity user)? progress,
+    TResult? Function(NotAuthenticatedUser user)? notAuthenticatedWithCode,
     TResult? Function(NotAuthenticatedUser user)? notAuthenticated,
   }) {
     return error?.call(user, message);
@@ -937,6 +950,7 @@ class _$_ErrorAuthenticationState extends _ErrorAuthenticationState {
     TResult Function(UserEntity user)? authenticatedWithoutProfile,
     TResult Function(UserEntity user)? authenticatedWithProfile,
     TResult Function(UserEntity user)? progress,
+    TResult Function(NotAuthenticatedUser user)? notAuthenticatedWithCode,
     TResult Function(NotAuthenticatedUser user)? notAuthenticated,
     required TResult orElse(),
   }) {
@@ -955,6 +969,8 @@ class _$_ErrorAuthenticationState extends _ErrorAuthenticationState {
     required TResult Function(_AuthenticatedState value)
         authenticatedWithProfile,
     required TResult Function(_AuthenticationInProgressState value) progress,
+    required TResult Function(_NotAuthenticatedWithCodeState value)
+        notAuthenticatedWithCode,
     required TResult Function(_NotAuthenticatedState value) notAuthenticated,
   }) {
     return error(this);
@@ -968,6 +984,8 @@ class _$_ErrorAuthenticationState extends _ErrorAuthenticationState {
         authenticatedWithoutProfile,
     TResult? Function(_AuthenticatedState value)? authenticatedWithProfile,
     TResult? Function(_AuthenticationInProgressState value)? progress,
+    TResult? Function(_NotAuthenticatedWithCodeState value)?
+        notAuthenticatedWithCode,
     TResult? Function(_NotAuthenticatedState value)? notAuthenticated,
   }) {
     return error?.call(this);
@@ -981,6 +999,8 @@ class _$_ErrorAuthenticationState extends _ErrorAuthenticationState {
         authenticatedWithoutProfile,
     TResult Function(_AuthenticatedState value)? authenticatedWithProfile,
     TResult Function(_AuthenticationInProgressState value)? progress,
+    TResult Function(_NotAuthenticatedWithCodeState value)?
+        notAuthenticatedWithCode,
     TResult Function(_NotAuthenticatedState value)? notAuthenticated,
     required TResult orElse(),
   }) {
@@ -1079,6 +1099,8 @@ class _$_AuthenticatedWithoutProfileState
     required TResult Function(UserEntity user) authenticatedWithoutProfile,
     required TResult Function(UserEntity user) authenticatedWithProfile,
     required TResult Function(UserEntity user) progress,
+    required TResult Function(NotAuthenticatedUser user)
+        notAuthenticatedWithCode,
     required TResult Function(NotAuthenticatedUser user) notAuthenticated,
   }) {
     return authenticatedWithoutProfile(user);
@@ -1091,6 +1113,7 @@ class _$_AuthenticatedWithoutProfileState
     TResult? Function(UserEntity user)? authenticatedWithoutProfile,
     TResult? Function(UserEntity user)? authenticatedWithProfile,
     TResult? Function(UserEntity user)? progress,
+    TResult? Function(NotAuthenticatedUser user)? notAuthenticatedWithCode,
     TResult? Function(NotAuthenticatedUser user)? notAuthenticated,
   }) {
     return authenticatedWithoutProfile?.call(user);
@@ -1103,6 +1126,7 @@ class _$_AuthenticatedWithoutProfileState
     TResult Function(UserEntity user)? authenticatedWithoutProfile,
     TResult Function(UserEntity user)? authenticatedWithProfile,
     TResult Function(UserEntity user)? progress,
+    TResult Function(NotAuthenticatedUser user)? notAuthenticatedWithCode,
     TResult Function(NotAuthenticatedUser user)? notAuthenticated,
     required TResult orElse(),
   }) {
@@ -1121,6 +1145,8 @@ class _$_AuthenticatedWithoutProfileState
     required TResult Function(_AuthenticatedState value)
         authenticatedWithProfile,
     required TResult Function(_AuthenticationInProgressState value) progress,
+    required TResult Function(_NotAuthenticatedWithCodeState value)
+        notAuthenticatedWithCode,
     required TResult Function(_NotAuthenticatedState value) notAuthenticated,
   }) {
     return authenticatedWithoutProfile(this);
@@ -1134,6 +1160,8 @@ class _$_AuthenticatedWithoutProfileState
         authenticatedWithoutProfile,
     TResult? Function(_AuthenticatedState value)? authenticatedWithProfile,
     TResult? Function(_AuthenticationInProgressState value)? progress,
+    TResult? Function(_NotAuthenticatedWithCodeState value)?
+        notAuthenticatedWithCode,
     TResult? Function(_NotAuthenticatedState value)? notAuthenticated,
   }) {
     return authenticatedWithoutProfile?.call(this);
@@ -1147,6 +1175,8 @@ class _$_AuthenticatedWithoutProfileState
         authenticatedWithoutProfile,
     TResult Function(_AuthenticatedState value)? authenticatedWithProfile,
     TResult Function(_AuthenticationInProgressState value)? progress,
+    TResult Function(_NotAuthenticatedWithCodeState value)?
+        notAuthenticatedWithCode,
     TResult Function(_NotAuthenticatedState value)? notAuthenticated,
     required TResult orElse(),
   }) {
@@ -1239,6 +1269,8 @@ class _$_AuthenticatedState extends _AuthenticatedState {
     required TResult Function(UserEntity user) authenticatedWithoutProfile,
     required TResult Function(UserEntity user) authenticatedWithProfile,
     required TResult Function(UserEntity user) progress,
+    required TResult Function(NotAuthenticatedUser user)
+        notAuthenticatedWithCode,
     required TResult Function(NotAuthenticatedUser user) notAuthenticated,
   }) {
     return authenticatedWithProfile(user);
@@ -1251,6 +1283,7 @@ class _$_AuthenticatedState extends _AuthenticatedState {
     TResult? Function(UserEntity user)? authenticatedWithoutProfile,
     TResult? Function(UserEntity user)? authenticatedWithProfile,
     TResult? Function(UserEntity user)? progress,
+    TResult? Function(NotAuthenticatedUser user)? notAuthenticatedWithCode,
     TResult? Function(NotAuthenticatedUser user)? notAuthenticated,
   }) {
     return authenticatedWithProfile?.call(user);
@@ -1263,6 +1296,7 @@ class _$_AuthenticatedState extends _AuthenticatedState {
     TResult Function(UserEntity user)? authenticatedWithoutProfile,
     TResult Function(UserEntity user)? authenticatedWithProfile,
     TResult Function(UserEntity user)? progress,
+    TResult Function(NotAuthenticatedUser user)? notAuthenticatedWithCode,
     TResult Function(NotAuthenticatedUser user)? notAuthenticated,
     required TResult orElse(),
   }) {
@@ -1281,6 +1315,8 @@ class _$_AuthenticatedState extends _AuthenticatedState {
     required TResult Function(_AuthenticatedState value)
         authenticatedWithProfile,
     required TResult Function(_AuthenticationInProgressState value) progress,
+    required TResult Function(_NotAuthenticatedWithCodeState value)
+        notAuthenticatedWithCode,
     required TResult Function(_NotAuthenticatedState value) notAuthenticated,
   }) {
     return authenticatedWithProfile(this);
@@ -1294,6 +1330,8 @@ class _$_AuthenticatedState extends _AuthenticatedState {
         authenticatedWithoutProfile,
     TResult? Function(_AuthenticatedState value)? authenticatedWithProfile,
     TResult? Function(_AuthenticationInProgressState value)? progress,
+    TResult? Function(_NotAuthenticatedWithCodeState value)?
+        notAuthenticatedWithCode,
     TResult? Function(_NotAuthenticatedState value)? notAuthenticated,
   }) {
     return authenticatedWithProfile?.call(this);
@@ -1307,6 +1345,8 @@ class _$_AuthenticatedState extends _AuthenticatedState {
         authenticatedWithoutProfile,
     TResult Function(_AuthenticatedState value)? authenticatedWithProfile,
     TResult Function(_AuthenticationInProgressState value)? progress,
+    TResult Function(_NotAuthenticatedWithCodeState value)?
+        notAuthenticatedWithCode,
     TResult Function(_NotAuthenticatedState value)? notAuthenticated,
     required TResult orElse(),
   }) {
@@ -1401,6 +1441,8 @@ class _$_AuthenticationInProgressState extends _AuthenticationInProgressState {
     required TResult Function(UserEntity user) authenticatedWithoutProfile,
     required TResult Function(UserEntity user) authenticatedWithProfile,
     required TResult Function(UserEntity user) progress,
+    required TResult Function(NotAuthenticatedUser user)
+        notAuthenticatedWithCode,
     required TResult Function(NotAuthenticatedUser user) notAuthenticated,
   }) {
     return progress(user);
@@ -1413,6 +1455,7 @@ class _$_AuthenticationInProgressState extends _AuthenticationInProgressState {
     TResult? Function(UserEntity user)? authenticatedWithoutProfile,
     TResult? Function(UserEntity user)? authenticatedWithProfile,
     TResult? Function(UserEntity user)? progress,
+    TResult? Function(NotAuthenticatedUser user)? notAuthenticatedWithCode,
     TResult? Function(NotAuthenticatedUser user)? notAuthenticated,
   }) {
     return progress?.call(user);
@@ -1425,6 +1468,7 @@ class _$_AuthenticationInProgressState extends _AuthenticationInProgressState {
     TResult Function(UserEntity user)? authenticatedWithoutProfile,
     TResult Function(UserEntity user)? authenticatedWithProfile,
     TResult Function(UserEntity user)? progress,
+    TResult Function(NotAuthenticatedUser user)? notAuthenticatedWithCode,
     TResult Function(NotAuthenticatedUser user)? notAuthenticated,
     required TResult orElse(),
   }) {
@@ -1443,6 +1487,8 @@ class _$_AuthenticationInProgressState extends _AuthenticationInProgressState {
     required TResult Function(_AuthenticatedState value)
         authenticatedWithProfile,
     required TResult Function(_AuthenticationInProgressState value) progress,
+    required TResult Function(_NotAuthenticatedWithCodeState value)
+        notAuthenticatedWithCode,
     required TResult Function(_NotAuthenticatedState value) notAuthenticated,
   }) {
     return progress(this);
@@ -1456,6 +1502,8 @@ class _$_AuthenticationInProgressState extends _AuthenticationInProgressState {
         authenticatedWithoutProfile,
     TResult? Function(_AuthenticatedState value)? authenticatedWithProfile,
     TResult? Function(_AuthenticationInProgressState value)? progress,
+    TResult? Function(_NotAuthenticatedWithCodeState value)?
+        notAuthenticatedWithCode,
     TResult? Function(_NotAuthenticatedState value)? notAuthenticated,
   }) {
     return progress?.call(this);
@@ -1469,6 +1517,8 @@ class _$_AuthenticationInProgressState extends _AuthenticationInProgressState {
         authenticatedWithoutProfile,
     TResult Function(_AuthenticatedState value)? authenticatedWithProfile,
     TResult Function(_AuthenticationInProgressState value)? progress,
+    TResult Function(_NotAuthenticatedWithCodeState value)?
+        notAuthenticatedWithCode,
     TResult Function(_NotAuthenticatedState value)? notAuthenticated,
     required TResult orElse(),
   }) {
@@ -1488,6 +1538,182 @@ abstract class _AuthenticationInProgressState extends AuthenticationState {
   UserEntity get user;
   @JsonKey(ignore: true)
   _$$_AuthenticationInProgressStateCopyWith<_$_AuthenticationInProgressState>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$_NotAuthenticatedWithCodeStateCopyWith<$Res> {
+  factory _$$_NotAuthenticatedWithCodeStateCopyWith(
+          _$_NotAuthenticatedWithCodeState value,
+          $Res Function(_$_NotAuthenticatedWithCodeState) then) =
+      __$$_NotAuthenticatedWithCodeStateCopyWithImpl<$Res>;
+  @useResult
+  $Res call({NotAuthenticatedUser user});
+}
+
+/// @nodoc
+class __$$_NotAuthenticatedWithCodeStateCopyWithImpl<$Res>
+    extends _$AuthenticationStateCopyWithImpl<$Res,
+        _$_NotAuthenticatedWithCodeState>
+    implements _$$_NotAuthenticatedWithCodeStateCopyWith<$Res> {
+  __$$_NotAuthenticatedWithCodeStateCopyWithImpl(
+      _$_NotAuthenticatedWithCodeState _value,
+      $Res Function(_$_NotAuthenticatedWithCodeState) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? user = null,
+  }) {
+    return _then(_$_NotAuthenticatedWithCodeState(
+      user: null == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as NotAuthenticatedUser,
+    ));
+  }
+}
+
+/// @nodoc
+
+@literal
+class _$_NotAuthenticatedWithCodeState extends _NotAuthenticatedWithCodeState {
+  const _$_NotAuthenticatedWithCodeState(
+      {this.user = const NotAuthenticatedUser()})
+      : super._();
+
+  @override
+  @JsonKey()
+  final NotAuthenticatedUser user;
+
+  @override
+  String toString() {
+    return 'AuthenticationState.notAuthenticatedWithCode(user: $user)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_NotAuthenticatedWithCodeState &&
+            (identical(other.user, user) || other.user == user));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, user);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_NotAuthenticatedWithCodeStateCopyWith<_$_NotAuthenticatedWithCodeState>
+      get copyWith => __$$_NotAuthenticatedWithCodeStateCopyWithImpl<
+          _$_NotAuthenticatedWithCodeState>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(UserEntity user, String message) error,
+    required TResult Function(UserEntity user) authenticatedWithoutProfile,
+    required TResult Function(UserEntity user) authenticatedWithProfile,
+    required TResult Function(UserEntity user) progress,
+    required TResult Function(NotAuthenticatedUser user)
+        notAuthenticatedWithCode,
+    required TResult Function(NotAuthenticatedUser user) notAuthenticated,
+  }) {
+    return notAuthenticatedWithCode(user);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(UserEntity user, String message)? error,
+    TResult? Function(UserEntity user)? authenticatedWithoutProfile,
+    TResult? Function(UserEntity user)? authenticatedWithProfile,
+    TResult? Function(UserEntity user)? progress,
+    TResult? Function(NotAuthenticatedUser user)? notAuthenticatedWithCode,
+    TResult? Function(NotAuthenticatedUser user)? notAuthenticated,
+  }) {
+    return notAuthenticatedWithCode?.call(user);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(UserEntity user, String message)? error,
+    TResult Function(UserEntity user)? authenticatedWithoutProfile,
+    TResult Function(UserEntity user)? authenticatedWithProfile,
+    TResult Function(UserEntity user)? progress,
+    TResult Function(NotAuthenticatedUser user)? notAuthenticatedWithCode,
+    TResult Function(NotAuthenticatedUser user)? notAuthenticated,
+    required TResult orElse(),
+  }) {
+    if (notAuthenticatedWithCode != null) {
+      return notAuthenticatedWithCode(user);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_ErrorAuthenticationState value) error,
+    required TResult Function(_AuthenticatedWithoutProfileState value)
+        authenticatedWithoutProfile,
+    required TResult Function(_AuthenticatedState value)
+        authenticatedWithProfile,
+    required TResult Function(_AuthenticationInProgressState value) progress,
+    required TResult Function(_NotAuthenticatedWithCodeState value)
+        notAuthenticatedWithCode,
+    required TResult Function(_NotAuthenticatedState value) notAuthenticated,
+  }) {
+    return notAuthenticatedWithCode(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_ErrorAuthenticationState value)? error,
+    TResult? Function(_AuthenticatedWithoutProfileState value)?
+        authenticatedWithoutProfile,
+    TResult? Function(_AuthenticatedState value)? authenticatedWithProfile,
+    TResult? Function(_AuthenticationInProgressState value)? progress,
+    TResult? Function(_NotAuthenticatedWithCodeState value)?
+        notAuthenticatedWithCode,
+    TResult? Function(_NotAuthenticatedState value)? notAuthenticated,
+  }) {
+    return notAuthenticatedWithCode?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_ErrorAuthenticationState value)? error,
+    TResult Function(_AuthenticatedWithoutProfileState value)?
+        authenticatedWithoutProfile,
+    TResult Function(_AuthenticatedState value)? authenticatedWithProfile,
+    TResult Function(_AuthenticationInProgressState value)? progress,
+    TResult Function(_NotAuthenticatedWithCodeState value)?
+        notAuthenticatedWithCode,
+    TResult Function(_NotAuthenticatedState value)? notAuthenticated,
+    required TResult orElse(),
+  }) {
+    if (notAuthenticatedWithCode != null) {
+      return notAuthenticatedWithCode(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _NotAuthenticatedWithCodeState extends AuthenticationState {
+  const factory _NotAuthenticatedWithCodeState(
+      {final NotAuthenticatedUser user}) = _$_NotAuthenticatedWithCodeState;
+  const _NotAuthenticatedWithCodeState._() : super._();
+
+  @override
+  NotAuthenticatedUser get user;
+  @JsonKey(ignore: true)
+  _$$_NotAuthenticatedWithCodeStateCopyWith<_$_NotAuthenticatedWithCodeState>
       get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -1563,6 +1789,8 @@ class _$_NotAuthenticatedState extends _NotAuthenticatedState {
     required TResult Function(UserEntity user) authenticatedWithoutProfile,
     required TResult Function(UserEntity user) authenticatedWithProfile,
     required TResult Function(UserEntity user) progress,
+    required TResult Function(NotAuthenticatedUser user)
+        notAuthenticatedWithCode,
     required TResult Function(NotAuthenticatedUser user) notAuthenticated,
   }) {
     return notAuthenticated(user);
@@ -1575,6 +1803,7 @@ class _$_NotAuthenticatedState extends _NotAuthenticatedState {
     TResult? Function(UserEntity user)? authenticatedWithoutProfile,
     TResult? Function(UserEntity user)? authenticatedWithProfile,
     TResult? Function(UserEntity user)? progress,
+    TResult? Function(NotAuthenticatedUser user)? notAuthenticatedWithCode,
     TResult? Function(NotAuthenticatedUser user)? notAuthenticated,
   }) {
     return notAuthenticated?.call(user);
@@ -1587,6 +1816,7 @@ class _$_NotAuthenticatedState extends _NotAuthenticatedState {
     TResult Function(UserEntity user)? authenticatedWithoutProfile,
     TResult Function(UserEntity user)? authenticatedWithProfile,
     TResult Function(UserEntity user)? progress,
+    TResult Function(NotAuthenticatedUser user)? notAuthenticatedWithCode,
     TResult Function(NotAuthenticatedUser user)? notAuthenticated,
     required TResult orElse(),
   }) {
@@ -1605,6 +1835,8 @@ class _$_NotAuthenticatedState extends _NotAuthenticatedState {
     required TResult Function(_AuthenticatedState value)
         authenticatedWithProfile,
     required TResult Function(_AuthenticationInProgressState value) progress,
+    required TResult Function(_NotAuthenticatedWithCodeState value)
+        notAuthenticatedWithCode,
     required TResult Function(_NotAuthenticatedState value) notAuthenticated,
   }) {
     return notAuthenticated(this);
@@ -1618,6 +1850,8 @@ class _$_NotAuthenticatedState extends _NotAuthenticatedState {
         authenticatedWithoutProfile,
     TResult? Function(_AuthenticatedState value)? authenticatedWithProfile,
     TResult? Function(_AuthenticationInProgressState value)? progress,
+    TResult? Function(_NotAuthenticatedWithCodeState value)?
+        notAuthenticatedWithCode,
     TResult? Function(_NotAuthenticatedState value)? notAuthenticated,
   }) {
     return notAuthenticated?.call(this);
@@ -1631,6 +1865,8 @@ class _$_NotAuthenticatedState extends _NotAuthenticatedState {
         authenticatedWithoutProfile,
     TResult Function(_AuthenticatedState value)? authenticatedWithProfile,
     TResult Function(_AuthenticationInProgressState value)? progress,
+    TResult Function(_NotAuthenticatedWithCodeState value)?
+        notAuthenticatedWithCode,
     TResult Function(_NotAuthenticatedState value)? notAuthenticated,
     required TResult orElse(),
   }) {

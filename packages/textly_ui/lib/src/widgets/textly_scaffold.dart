@@ -1,8 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:flutter/material.dart';
-import 'package:textly_ui/src/consts/consts.dart';
-import 'package:textly_ui/src/theme/textly_scaffold_theme.dart';
+
 import 'package:textly_ui/textly_ui.dart';
 
 class TextlyScaffold extends StatefulWidget {
@@ -137,9 +136,7 @@ class _XLargeScaffold extends StatelessWidget {
                       if (appBar != null)
                         SizedBox(
                           height: appBar?.heightAppBar,
-                          child: const Center(
-                            child: longLogo,
-                          ),
+                          child: appBar?.leftSideLeading,
                         ),
                       Expanded(child: navigationRail!),
                     ],
@@ -177,6 +174,7 @@ class _XLargeScaffold extends StatelessWidget {
                       if (appBar != null)
                         SizedBox(
                           height: appBar?.heightAppBar,
+                          child: appBar?.rightSideLeading,
                         ),
                       Expanded(
                         child: KeyedSubtree(
@@ -262,9 +260,7 @@ class _LargeScaffold extends StatelessWidget {
                       if (appBar != null)
                         SizedBox(
                           height: appBar?.heightAppBar,
-                          child: const Center(
-                            child: longLogo,
-                          ),
+                          child: appBar?.leftSideLeading,
                         ),
                       Expanded(child: navigationRail!),
                     ],
@@ -299,6 +295,7 @@ class _LargeScaffold extends StatelessWidget {
                       if (appBar != null)
                         SizedBox(
                           height: appBar?.heightAppBar,
+                          child: appBar?.rightSideLeading,
                         ),
                       Expanded(
                         child: KeyedSubtree(
@@ -385,9 +382,7 @@ class _MediumScaffold extends StatelessWidget {
                         if (appBar != null)
                           SizedBox(
                             height: appBar?.heightAppBar,
-                            child: const Center(
-                              child: longLogo,
-                            ),
+                            child: appBar?.leftSideLeading,
                           ),
                         Expanded(child: navigationRail!),
                       ],
@@ -442,6 +437,7 @@ class _MediumScaffold extends StatelessWidget {
                         if (appBar != null)
                           SizedBox(
                             height: appBar?.heightAppBar,
+                            child: appBar?.rightSideLeading,
                           ),
                         Expanded(
                           child: KeyedSubtree(
@@ -527,9 +523,7 @@ class _SmallScaffold extends StatelessWidget {
                         if (appBar != null)
                           SizedBox(
                             height: appBar?.heightAppBar,
-                            child: const Center(
-                              child: shortLogo,
-                            ),
+                            child: appBar?.leftSideLeading,
                           ),
                         Expanded(child: navigationRail!),
                       ],
@@ -572,6 +566,7 @@ class _SmallScaffold extends StatelessWidget {
                           if (appBar != null)
                             SizedBox(
                               height: appBar?.heightAppBar,
+                              child: appBar?.rightSideLeading,
                             ),
                           Expanded(
                             child: KeyedSubtree(
@@ -632,28 +627,21 @@ class _XSmallScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        if (appBar != null)
-          Container(
-            height: appBar?.heightAppBar,
-            color: appBar?.colorAppBar,
-          ),
         Column(
           children: [
-            if (appBar != null)
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: appBar?.heightAppBar ?? double.infinity,
+            if (appBar != null) appBar!.appBar,
+            MediaQuery.removeViewPadding(
+              context: context,
+              removeTop: true,
+              child: Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: KeyedSubtree(key: bodyKey, child: body),
+                    ),
+                  ],
                 ),
-                child: appBar?.appBar,
-              ),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: KeyedSubtree(key: bodyKey, child: body),
-                  ),
-                ],
               ),
             ),
             if (bottomNavigationBar != null)

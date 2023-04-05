@@ -11,7 +11,8 @@ abstract class UserEntity {
     required bool withProfile,
   }) = AuthenticatedUser;
 
-  const factory UserEntity.notAuthenticated() = NotAuthenticatedUser;
+  const factory UserEntity.notAuthenticated({String? email}) =
+      NotAuthenticatedUser;
 
   bool get withProfile;
 
@@ -32,8 +33,7 @@ abstract class UserEntity {
 }
 
 class NotAuthenticatedUser implements UserEntity {
-  @literal
-  const NotAuthenticatedUser();
+  const NotAuthenticatedUser({this.email});
   @override
   bool get isAuthenticated => false;
 
@@ -59,7 +59,7 @@ class NotAuthenticatedUser implements UserEntity {
   OAuth2Token? get tokens => null;
 
   @override
-  String? get email => null;
+  final String? email;
 
   @override
   bool get isAuthenticatedWithProfile => false;

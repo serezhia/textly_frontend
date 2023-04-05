@@ -64,6 +64,11 @@ class AuthenticationState with _$AuthenticationState {
 
   /// Разлогинен / Не аутентифицирован
   @literal
+  const factory AuthenticationState.notAuthenticatedWithCode({
+    @Default(NotAuthenticatedUser()) NotAuthenticatedUser user,
+  }) = _NotAuthenticatedWithCodeState;
+
+  @literal
   const factory AuthenticationState.notAuthenticated({
     @Default(NotAuthenticatedUser()) NotAuthenticatedUser user,
   }) = _NotAuthenticatedState;
@@ -73,6 +78,7 @@ class AuthenticationState with _$AuthenticationState {
   @override
   UserEntity get user => super.map<UserEntity>(
         notAuthenticated: (_) => const NotAuthenticatedUser(),
+        notAuthenticatedWithCode: (_) => const NotAuthenticatedUser(),
         progress: (state) => state.user,
         authenticatedWithProfile: (state) => state.user,
         authenticatedWithoutProfile: (state) => state.user,
@@ -103,7 +109,15 @@ class AuthenticationState with _$AuthenticationState {
             return AuthenticationState.authenticatedWithoutProfile(user: user);
           }
         },
-        notAuthenticated: () => const AuthenticationState.notAuthenticated(),
+        notAuthenticated: () {
+          if (user.email != null) {
+            return AuthenticationState.notAuthenticatedWithCode(
+              user: NotAuthenticatedUser(email: user.email),
+            );
+          } else {
+            return const AuthenticationState.notAuthenticated();
+          }
+        },
       );
 }
 
@@ -155,7 +169,7 @@ class AuthenticationBLoC extends Bloc<AuthenticationEvent, AuthenticationState>
           message: 'Error signin',
         ),
       );
-      emit(AuthenticationState.fromUser(const NotAuthenticatedUser()));
+      emit(const AuthenticationState.notAuthenticatedWithCode());
       rethrow;
     }
   }
@@ -187,8 +201,10 @@ class AuthenticationBLoC extends Bloc<AuthenticationEvent, AuthenticationState>
     l.vvvvvv('Начат процесс отправки кода авторизации');
     emit(AuthenticationState.progress(user: state.user));
     try {
-      await _authenticationRepository.sendEmailCode(email: event.email);
-      emit(AuthenticationState.fromUser(const NotAuthenticatedUser()));
+      final newUser =
+          await _authenticationRepository.sendEmailCode(email: event.email);
+      await Future<void>.delayed(const Duration(seconds: 1));
+      emit(AuthenticationState.fromUser(newUser));
     } on Object {
       l.w('Во время отправки кода произошла ошибка');
       emit(
