@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' show FlutterError;
 import 'package:flutter/widgets.dart' show WidgetsFlutterBinding;
 import 'package:l/l.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:textly/main/bootstrap.dart';
 
 import 'package:textly/runner/runner_unknow.dart'
     if (dart.library.io) 'package:textly/runner/runner_io.dart'
@@ -38,7 +39,8 @@ Future<void> _appRunner() async {
   final ensureInitializedMs = stopwatchBeforeRunApp.elapsedMilliseconds;
 
   // Запуск приложения в зависимости от платформы
-  await runner.runApp();
+
+  await bootstrap(runner.runApp);
 
   final elapsedMilliseconds =
       (stopwatchBeforeRunApp..stop()).elapsedMilliseconds;

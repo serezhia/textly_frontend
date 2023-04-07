@@ -4,12 +4,14 @@ import 'package:textly_ui/textly_ui.dart';
 final lightTheme = ThemeData(
   extensions: const [
     TextlyScafoldTheme(backgroundColor: Color(0xFFFAFAFA)),
+    TextlyAppbarTheme(backgroundColor: Colors.white)
   ],
   appBarTheme: const AppBarTheme(
     titleTextStyle: TextStyle(
       fontWeight: FontWeight.w600,
       fontFamily: 'TT Norms Pro',
       fontSize: 24,
+      color: Colors.black,
     ),
     backgroundColor: Colors.white,
     elevation: 0,

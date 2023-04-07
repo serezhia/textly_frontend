@@ -1,6 +1,9 @@
 // ignore_for_file: public_member_api_docs
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:textly_ui/src/consts/consts.dart';
 
 import 'package:textly_ui/textly_ui.dart';
 
@@ -119,8 +122,9 @@ class _XLargeScaffold extends StatelessWidget {
         children: [
           if (isRootScreen && appBar != null)
             Container(
-              height: appBar?.heightAppBar,
-              color: appBar?.colorAppBar,
+              height: appBar?.heightAppBar ??
+                  kAppBarHeight + MediaQuery.of(context).viewPadding.top,
+              color: appBar?.theme?.backgroundColor ?? Colors.white,
             ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -133,9 +137,11 @@ class _XLargeScaffold extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      if (appBar != null)
+                      if (appBar?.leftSideLeading != null)
                         SizedBox(
-                          height: appBar?.heightAppBar,
+                          height: appBar?.heightAppBar ??
+                              kAppBarHeight +
+                                  MediaQuery.of(context).viewPadding.top,
                           child: appBar?.leftSideLeading,
                         ),
                       Expanded(child: navigationRail!),
@@ -147,12 +153,14 @@ class _XLargeScaffold extends StatelessWidget {
                 constraints: const BoxConstraints(maxWidth: 600),
                 child: Column(
                   children: [
-                    if (appBar != null)
+                    if (appBar?.centerAppBar != null)
                       ConstrainedBox(
                         constraints: BoxConstraints(
-                          maxHeight: appBar?.heightAppBar ?? double.infinity,
+                          maxHeight: appBar?.heightAppBar ??
+                              kAppBarHeight +
+                                  MediaQuery.of(context).viewPadding.top,
                         ),
-                        child: appBar?.appBar,
+                        child: appBar!.centerAppBar,
                       ),
                     Expanded(
                       child: ConstrainedBox(
@@ -171,9 +179,11 @@ class _XLargeScaffold extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      if (appBar != null)
+                      if (appBar?.rightSideLeading != null)
                         SizedBox(
-                          height: appBar?.heightAppBar,
+                          height: appBar?.heightAppBar ??
+                              kAppBarHeight +
+                                  MediaQuery.of(context).viewPadding.top,
                           child: appBar?.rightSideLeading,
                         ),
                       Expanded(
@@ -193,12 +203,13 @@ class _XLargeScaffold extends StatelessWidget {
     } else {
       return Column(
         children: [
-          if (appBar != null)
+          if (appBar?.centerAppBar != null)
             ConstrainedBox(
               constraints: BoxConstraints(
-                maxHeight: appBar?.heightAppBar ?? double.infinity,
+                maxHeight: appBar?.heightAppBar ??
+                    kAppBarHeight + MediaQuery.of(context).viewPadding.top,
               ),
-              child: appBar?.appBar,
+              child: appBar?.centerAppBar,
             ),
           Expanded(
             child: Row(
@@ -244,8 +255,9 @@ class _LargeScaffold extends StatelessWidget {
         children: [
           if (isRootScreen && appBar != null)
             Container(
-              height: appBar?.heightAppBar,
-              color: appBar?.colorAppBar,
+              height: appBar?.heightAppBar ??
+                  kAppBarHeight + MediaQuery.of(context).viewPadding.top,
+              color: appBar?.theme?.backgroundColor ?? Colors.white,
             ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -271,12 +283,12 @@ class _LargeScaffold extends StatelessWidget {
                 constraints: const BoxConstraints(maxWidth: 600),
                 child: Column(
                   children: [
-                    if (appBar != null)
+                    if (appBar?.centerAppBar != null)
                       ConstrainedBox(
                         constraints: BoxConstraints(
-                          maxHeight: appBar?.heightAppBar ?? double.infinity,
+                          maxHeight: appBar?.heightAppBar ?? kAppBarHeight,
                         ),
-                        child: appBar?.appBar,
+                        child: appBar?.centerAppBar,
                       ),
                     Expanded(
                       child: KeyedSubtree(key: bodyKey, child: body),
@@ -292,9 +304,11 @@ class _LargeScaffold extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      if (appBar != null)
+                      if (appBar?.rightSideLeading != null)
                         SizedBox(
-                          height: appBar?.heightAppBar,
+                          height: appBar?.heightAppBar ??
+                              kAppBarHeight +
+                                  MediaQuery.of(context).viewPadding.top,
                           child: appBar?.rightSideLeading,
                         ),
                       Expanded(
@@ -314,12 +328,13 @@ class _LargeScaffold extends StatelessWidget {
     } else {
       return Column(
         children: [
-          if (appBar != null)
+          if (appBar?.centerAppBar != null)
             ConstrainedBox(
               constraints: BoxConstraints(
-                maxHeight: appBar?.heightAppBar ?? double.infinity,
+                maxHeight: appBar?.heightAppBar ??
+                    kAppBarHeight + MediaQuery.of(context).viewPadding.top,
               ),
-              child: appBar?.appBar,
+              child: appBar?.centerAppBar,
             ),
           Expanded(
             child: Row(
@@ -366,8 +381,9 @@ class _MediumScaffold extends StatelessWidget {
           children: [
             if (isRootScreen && appBar != null)
               Container(
-                height: appBar?.heightAppBar,
-                color: appBar?.colorAppBar,
+                height: appBar?.heightAppBar ??
+                    kAppBarHeight + MediaQuery.of(context).viewPadding.top,
+                color: appBar?.theme?.backgroundColor ?? Colors.white,
               ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -381,7 +397,9 @@ class _MediumScaffold extends StatelessWidget {
                       children: [
                         if (appBar != null)
                           SizedBox(
-                            height: appBar?.heightAppBar,
+                            height: appBar?.heightAppBar ??
+                                kAppBarHeight +
+                                    MediaQuery.of(context).viewPadding.top,
                             child: appBar?.leftSideLeading,
                           ),
                         Expanded(child: navigationRail!),
@@ -394,13 +412,14 @@ class _MediumScaffold extends StatelessWidget {
                     width: 600,
                     child: Column(
                       children: [
-                        if (appBar != null)
+                        if (appBar?.centerAppBar != null)
                           ConstrainedBox(
                             constraints: BoxConstraints(
-                              maxHeight:
-                                  appBar?.heightAppBar ?? double.infinity,
+                              maxHeight: appBar?.heightAppBar ??
+                                  kAppBarHeight +
+                                      MediaQuery.of(context).viewPadding.top,
                             ),
-                            child: appBar?.appBar,
+                            child: appBar?.centerAppBar,
                           ),
                         Expanded(
                           child: KeyedSubtree(key: bodyKey, child: body),
@@ -412,13 +431,14 @@ class _MediumScaffold extends StatelessWidget {
                   Expanded(
                     child: Column(
                       children: [
-                        if (appBar != null)
+                        if (appBar?.centerAppBar != null)
                           ConstrainedBox(
                             constraints: BoxConstraints(
-                              maxHeight:
-                                  appBar?.heightAppBar ?? double.infinity,
+                              maxHeight: appBar?.heightAppBar ??
+                                  kAppBarHeight +
+                                      MediaQuery.of(context).viewPadding.top,
                             ),
-                            child: appBar?.appBar,
+                            child: appBar?.centerAppBar,
                           ),
                         Expanded(
                           child: KeyedSubtree(key: bodyKey, child: body),
@@ -434,9 +454,11 @@ class _MediumScaffold extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        if (appBar != null)
+                        if (appBar?.rightSideLeading != null)
                           SizedBox(
-                            height: appBar?.heightAppBar,
+                            height: appBar?.heightAppBar ??
+                                kAppBarHeight +
+                                    MediaQuery.of(context).viewPadding.top,
                             child: appBar?.rightSideLeading,
                           ),
                         Expanded(
@@ -457,12 +479,13 @@ class _MediumScaffold extends StatelessWidget {
     } else {
       return Column(
         children: [
-          if (appBar != null)
+          if (appBar?.centerAppBar != null)
             ConstrainedBox(
               constraints: BoxConstraints(
-                maxHeight: appBar?.heightAppBar ?? double.infinity,
+                maxHeight: appBar?.heightAppBar ??
+                    kAppBarHeight + MediaQuery.of(context).viewPadding.top,
               ),
-              child: appBar?.appBar,
+              child: appBar?.centerAppBar,
             ),
           Expanded(
             child: Row(
@@ -507,8 +530,9 @@ class _SmallScaffold extends StatelessWidget {
         children: [
           if (isRootScreen && appBar != null)
             Container(
-              height: appBar?.heightAppBar,
-              color: appBar?.colorAppBar,
+              height: appBar?.heightAppBar ??
+                  kAppBarHeight + MediaQuery.of(context).viewPadding.top,
+              color: appBar?.theme?.backgroundColor ?? Colors.white,
             ),
           LayoutBuilder(
             builder: (context, constraints) => Row(
@@ -522,7 +546,9 @@ class _SmallScaffold extends StatelessWidget {
                       children: [
                         if (appBar != null)
                           SizedBox(
-                            height: appBar?.heightAppBar,
+                            height: appBar?.heightAppBar ??
+                                kAppBarHeight +
+                                    MediaQuery.of(context).viewPadding.top,
                             child: appBar?.leftSideLeading,
                           ),
                         Expanded(child: navigationRail!),
@@ -533,12 +559,14 @@ class _SmallScaffold extends StatelessWidget {
                 Expanded(
                   child: Column(
                     children: [
-                      if (appBar != null)
+                      if (appBar?.centerAppBar != null)
                         ConstrainedBox(
                           constraints: BoxConstraints(
-                            maxHeight: appBar?.heightAppBar ?? double.infinity,
+                            maxHeight: appBar?.heightAppBar ??
+                                kAppBarHeight +
+                                    MediaQuery.of(context).viewPadding.top,
                           ),
-                          child: appBar?.appBar,
+                          child: appBar?.centerAppBar,
                         ),
                       Expanded(
                         child: Row(
@@ -565,7 +593,9 @@ class _SmallScaffold extends StatelessWidget {
                         children: [
                           if (appBar != null)
                             SizedBox(
-                              height: appBar?.heightAppBar,
+                              height: appBar?.heightAppBar ??
+                                  kAppBarHeight +
+                                      MediaQuery.of(context).viewPadding.top,
                               child: appBar?.rightSideLeading,
                             ),
                           Expanded(
@@ -587,12 +617,13 @@ class _SmallScaffold extends StatelessWidget {
     } else {
       return Column(
         children: [
-          if (appBar != null)
+          if (appBar?.centerAppBar != null)
             ConstrainedBox(
               constraints: BoxConstraints(
-                maxHeight: appBar?.heightAppBar ?? double.infinity,
+                maxHeight: appBar?.heightAppBar ??
+                    kAppBarHeight + MediaQuery.of(context).viewPadding.top,
               ),
-              child: appBar?.appBar,
+              child: appBar?.centerAppBar,
             ),
           Expanded(
             child: Row(
@@ -625,34 +656,42 @@ class _XSmallScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Column(
       children: [
-        Column(
-          children: [
-            if (appBar != null) appBar!.appBar,
-            MediaQuery.removeViewPadding(
-              context: context,
-              removeTop: true,
-              child: Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: KeyedSubtree(key: bodyKey, child: body),
-                    ),
-                  ],
-                ),
+        if (appBar != null && appBar!.centerAppBar != null)
+          Column(
+            children: [
+              Container(
+                height: appBar?.heightAppBar ??
+                    appBar!.centerAppBar?.preferredSize.height,
+                color: appBar?.theme?.backgroundColor ?? Colors.white,
+              ),
+              appBar!.centerAppBar!
+            ],
+          ),
+        Builder(
+          builder: (newContext) => MediaQuery.removeViewPadding(
+            removeTop: true,
+            context: newContext,
+            child: Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: KeyedSubtree(key: bodyKey, child: body),
+                  ),
+                ],
               ),
             ),
-            if (bottomNavigationBar != null)
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: 60 + MediaQuery.of(context).padding.bottom,
-                ),
-                child: bottomNavigationBar,
-              )
-          ],
+          ),
         ),
+        if (bottomNavigationBar != null)
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: 60 + MediaQuery.of(context).padding.bottom,
+            ),
+            child: bottomNavigationBar,
+          )
       ],
     );
   }

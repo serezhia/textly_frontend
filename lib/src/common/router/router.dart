@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,6 +15,7 @@ import 'package:textly_core/textly_core.dart';
 
 class MainRouter {
   final _rootNavigatorKey = GlobalKey<NavigatorState>();
+  final _globalKey = GlobalKey();
 
   GoRouter get goRouter => GoRouter(
         navigatorKey: _rootNavigatorKey,
@@ -86,7 +88,8 @@ class MainRouter {
                     pageBuilder: (context, state) {
                       return NoTransitionPage(
                         key: state.pageKey,
-                        child: const ProfilePage(
+                        child: ProfilePage(
+                          key: _globalKey,
                           userId: null,
                         ),
                       );
@@ -169,13 +172,11 @@ class MainRouter {
           GoRoute(
             parentNavigatorKey: _rootNavigatorKey,
             path: '/profiles/:userId',
-            pageBuilder: (context, state) => MediaQuery.of(context)
-                        .size
-                        .width >=
-                    599
+            pageBuilder: (context, state) => kIsWeb
                 ? NoTransitionPage(
                     key: state.pageKey,
                     child: ProfilePage(
+                      key: state.pageKey,
                       userId: int.tryParse(state.params['userId'] ?? '') ?? -1,
                     ),
                   )

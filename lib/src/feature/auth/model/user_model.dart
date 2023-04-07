@@ -114,7 +114,7 @@ class AuthenticatedUser implements UserEntity {
   bool operator ==(Object other) => other is AuthenticatedUser;
 
   @override
-  int get hashCode => 0;
+  int get hashCode => withProfile ? 1 : 2;
 
   @override
   bool get isAuthenticatedWithProfile => withProfile;

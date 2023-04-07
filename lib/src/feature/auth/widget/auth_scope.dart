@@ -70,6 +70,16 @@ class AuthenticationScope extends StatefulWidget {
         listen: listen,
       ).isAuthenticated;
 
+  /// Проверить, авторизован ли текущий пользователь учитывая профиль
+  static bool isAuthenticatedWithProfileOf(
+    BuildContext context, {
+    bool listen = false,
+  }) =>
+      userOf(
+        context,
+        listen: listen,
+      ).isAuthenticatedWithProfile;
+
   /// Получить авторизованного пользователя из контекста или null
   static UserEntity? authenticatedOrNullOf(
     BuildContext context, {
@@ -182,17 +192,21 @@ class _AuthenticationScopeState extends State<AuthenticationScope> {
   }
 
   @override
-  Widget build(BuildContext context) => BlocProvider<AuthenticationBLoC>.value(
-        value: bloc,
-        child: BlocBuilder<AuthenticationBLoC, AuthenticationState>(
-          bloc: bloc,
-          builder: (context, state) => _InheritedAuthentication(
+  Widget build(BuildContext context) {
+    return BlocProvider<AuthenticationBLoC>.value(
+      value: bloc,
+      child: BlocBuilder<AuthenticationBLoC, AuthenticationState>(
+        bloc: bloc,
+        builder: (context, state) {
+          return _InheritedAuthentication(
             state: this,
             userEntity: state.user,
             child: widget.child,
-          ),
-        ),
-      );
+          );
+        },
+      ),
+    );
+  }
 }
 
 @immutable

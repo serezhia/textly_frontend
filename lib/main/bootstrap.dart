@@ -10,17 +10,17 @@ class AppBlocObserver extends BlocObserver {
   @override
   void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
     super.onChange(bloc, change);
-    l.vvvvvv('onChange(${bloc.runtimeType}, $change)');
+    l.v('onChange(${bloc.runtimeType}, $change)');
   }
 
   @override
   void onError(BlocBase<dynamic> bloc, Object error, StackTrace stackTrace) {
-    l.vvvvvv('onError(${bloc.runtimeType}, $error, $stackTrace)');
+    l.v('onError(${bloc.runtimeType}, $error, $stackTrace)');
     super.onError(bloc, error, stackTrace);
   }
 }
 
-Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
+Future<void> bootstrap(void Function() builder) async {
   FlutterError.onError = (details) {
     l.e(details.exceptionAsString(), details.stack);
   };
@@ -28,7 +28,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   Bloc.observer = const AppBlocObserver();
 
   await runZonedGuarded(
-    () async => runApp(await builder()),
+    () async => builder(),
     (error, stackTrace) => l.w(error.toString(), stackTrace),
   );
 }

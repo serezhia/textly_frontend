@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:textly/src/feature/auth/bloc/auth_bloc.dart';
 import 'package:textly/src/feature/auth/lego/auth_lego_widget.dart';
+import 'package:textly/src/feature/auth/widget/auth_dialog.dart';
 import 'package:textly/src/feature/auth/widget/auth_scope.dart';
 import 'package:textly/src/feature/home/widget/fab.dart';
 import 'package:textly/src/feature/home/widget/logo.dart';
@@ -25,112 +28,133 @@ class DefaultHomeScreen extends StatefulWidget {
 class _DefaultHomeScreenState extends State<DefaultHomeScreen> {
   int _currentIndex = -1;
 
-  final unAuthListNavItems = [
-    NavigationMenuItem(
+  final buttomListNavItems = [
+    UltraNavigationMenuItem(
       lable: 'Global',
       icon: const Text('🌏'),
       location: '/global',
+      isProtected: false,
+      isPush: false,
     ),
-    NavigationMenuItem(
-      lable: 'Settings',
-      icon: const Text('⚙️'),
-      location: '/settings',
-    ),
-  ];
-  final authListNavItems = [
-    NavigationMenuItem(
-      lable: 'Global',
-      icon: const Text('🌏'),
-      location: '/global',
-    ),
-    NavigationMenuItem(
+    UltraNavigationMenuItem(
       lable: 'Feed',
       icon: const Text('🔥'),
       location: '/feed',
+      isProtected: true,
+      isPush: false,
     ),
-    NavigationMenuItem(
+    UltraNavigationMenuItem(
       lable: 'Notification',
       icon: const Text('🔔'),
       location: '/notification',
+      isProtected: true,
+      isPush: false,
     ),
-    NavigationMenuItem(
+    UltraNavigationMenuItem(
       lable: 'Profile',
       icon: const Text('👤'),
       location: '/profile',
+      isProtected: true,
+      isPush: false,
     ),
-    NavigationMenuItem(
+  ];
+
+  final unAuthListNavItems = [
+    UltraNavigationMenuItem(
+      lable: 'Global',
+      icon: const Text('🌏'),
+      location: '/global',
+      isProtected: false,
+      isPush: false,
+    ),
+    UltraNavigationMenuItem(
       lable: 'Settings',
       icon: const Text('⚙️'),
       location: '/settings',
+      isProtected: false,
+      isPush: true,
     ),
   ];
-  @override
-  void initState() {
-    final user = AuthenticationScope.authenticatedWithProfileOrNullOf(
-      context,
-    );
-    if (user == null) {
-      for (var i = 0; i < unAuthListNavItems.length; i++) {
-        if (unAuthListNavItems[i].location!.contains(widget.location)) {
-          _currentIndex = i;
-        }
-      }
-    } else {
-      for (var i = 0; i < authListNavItems.length; i++) {
-        if (authListNavItems[i].location!.contains(widget.location)) {
-          _currentIndex = i;
-        }
-      }
-    }
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    final user = AuthenticationScope.authenticatedWithProfileOrNullOf(
-      context,
-    );
-    if (user == null) {
-      for (var i = 0; i < unAuthListNavItems.length; i++) {
-        if (unAuthListNavItems[i].location!.contains(widget.location)) {
-          _currentIndex = i;
-        }
-      }
-    } else {
-      for (var i = 0; i < authListNavItems.length; i++) {
-        if (authListNavItems[i].location!.contains(widget.location)) {
-          _currentIndex = i;
-        }
-      }
-    }
-    super.didChangeDependencies();
-  }
+  final authListNavItems = [
+    UltraNavigationMenuItem(
+      lable: 'Global',
+      icon: const Text('🌏'),
+      location: '/global',
+      isProtected: false,
+      isPush: false,
+    ),
+    UltraNavigationMenuItem(
+      lable: 'Feed',
+      icon: const Text('🔥'),
+      location: '/feed',
+      isProtected: true,
+      isPush: false,
+    ),
+    UltraNavigationMenuItem(
+      lable: 'Notification',
+      icon: const Text('🔔'),
+      location: '/notification',
+      isProtected: true,
+      isPush: false,
+    ),
+    UltraNavigationMenuItem(
+      lable: 'Profile',
+      icon: const Text('👤'),
+      location: '/profile',
+      isProtected: true,
+      isPush: false,
+    ),
+    UltraNavigationMenuItem(
+      lable: 'Settings',
+      icon: const Text('⚙️'),
+      location: '/settings',
+      isProtected: true,
+      isPush: true,
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    final user = AuthenticationScope.authenticatedWithProfileOrNullOf(
-      context,
-      listen: true,
-    );
+    final isAuthenticatedWithProfile =
+        context.watch<AuthenticationBLoC>().state.withProfile;
+
     return TextlyScaffold(
       appBar: TextlyAppBar(
-        appBar: AppBar(
+        heightAppBar: 0,
+        centerAppBar: AppBar(
+          automaticallyImplyLeading: false,
+          leading: MediaQuery.of(context).size.width < 600
+              ? BackButton(
+                  onPressed: () {
+                    if (GoRouter.of(context).canPop()) {
+                      GoRouter.of(context).pop();
+                    } else {
+                      context.go('/global');
+                    }
+                  },
+                )
+              : null,
           backgroundColor: Colors.white,
           elevation: 0,
-          title: Text(
-            AuthenticationScope.authenticatedOrNullOf(
-                      context,
-                      listen: true,
-                    ) !=
-                    null
-                ? authListNavItems[_currentIndex].lable
-                : unAuthListNavItems[_currentIndex].lable,
-            style: const TextStyle(color: Colors.black),
-          ),
+          title: Text(widget.title),
         ),
+        theme: Theme.of(context).extension<TextlyAppbarTheme>(),
         leftSideLeading: const LogoWidget(),
         rightSideLeading: Row(
           children: [
+            if (!AuthenticationScope.isAuthenticatedWithProfileOf(
+              context,
+              listen: true,
+            ))
+              TextButton(
+                child: const Text('SignIn'),
+                onPressed: () async {
+                  await showDialog<void>(
+                    context: context,
+                    builder: (context) => const AuthDialog(),
+                  );
+                },
+              ),
             if (AuthenticationScope.authenticatedOrNullOf(
                   context,
                   listen: true,
@@ -154,13 +178,18 @@ class _DefaultHomeScreenState extends State<DefaultHomeScreen> {
       ),
       navigationRail: SideNavigationMenu(
         fab: const FABWidget(),
-        items: user == null ? unAuthListNavItems : authListNavItems,
+        items:
+            isAuthenticatedWithProfile ? authListNavItems : unAuthListNavItems,
         onTap: (index) {
-          _currentIndex = index;
-          final item =
-              (user == null ? unAuthListNavItems : authListNavItems)[index];
+          final item = (isAuthenticatedWithProfile
+              ? authListNavItems
+              : unAuthListNavItems)[index];
           if (item.location != null) {
-            context.go(item.location!);
+            if (item.isPush ?? false) {
+              context.push(item.location!);
+            } else {
+              context.go(item.location!);
+            }
           }
           setState(() {});
         },

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:textly/src/feature/auth/bloc/auth_bloc.dart';
 import 'package:textly/src/feature/auth/lego/auth_lego_widget.dart';
 import 'package:textly/src/feature/auth/widget/auth_dialog.dart';
 import 'package:textly/src/feature/auth/widget/auth_scope.dart';
@@ -109,18 +111,18 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
   @override
   void initState() {
-    final user = AuthenticationScope.authenticatedWithProfileOrNullOf(
-      context,
-    );
-    if (user == null) {
-      for (var i = 0; i < unAuthListNavItems.length; i++) {
-        if (unAuthListNavItems[i].location!.contains(widget.location)) {
+    final isAuthenticatedWithProfile =
+        context.read<AuthenticationBLoC>().state.withProfile;
+
+    if (isAuthenticatedWithProfile) {
+      for (var i = 0; i < authListNavItems.length; i++) {
+        if (authListNavItems[i].location!.contains(widget.location)) {
           _currentIndex = i;
         }
       }
     } else {
-      for (var i = 0; i < authListNavItems.length; i++) {
-        if (authListNavItems[i].location!.contains(widget.location)) {
+      for (var i = 0; i < unAuthListNavItems.length; i++) {
+        if (unAuthListNavItems[i].location!.contains(widget.location)) {
           _currentIndex = i;
         }
       }
@@ -130,55 +132,44 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void didChangeDependencies() {
-    final user = AuthenticationScope.authenticatedWithProfileOrNullOf(
-      context,
-    );
-    if (user == null) {
-      for (var i = 0; i < unAuthListNavItems.length; i++) {
-        if (unAuthListNavItems[i].location!.contains(widget.location)) {
-          _currentIndex = i;
-        }
-      }
-    } else {
+    final isAuthenticatedWithProfile =
+        context.read<AuthenticationBLoC>().state.withProfile;
+
+    if (isAuthenticatedWithProfile) {
       for (var i = 0; i < authListNavItems.length; i++) {
         if (authListNavItems[i].location!.contains(widget.location)) {
           _currentIndex = i;
         }
       }
+    } else {
+      for (var i = 0; i < unAuthListNavItems.length; i++) {
+        if (unAuthListNavItems[i].location!.contains(widget.location)) {
+          _currentIndex = i;
+        }
+        if (_currentIndex > unAuthListNavItems.length) {
+          _currentIndex = -1;
+        }
+      }
     }
+
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = AuthenticationScope.authenticatedWithProfileOrNullOf(
-      context,
-      listen: true,
-    );
+    final isAuthenticatedWithProfile =
+        context.watch<AuthenticationBLoC>().state.withProfile;
+
     return TextlyScaffold(
       appBar: TextlyAppBar(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          title: Text(
-            AuthenticationScope.authenticatedOrNullOf(
-                      context,
-                      listen: true,
-                    ) !=
-                    null
-                ? authListNavItems[_currentIndex].lable
-                : unAuthListNavItems[_currentIndex].lable,
-            style: const TextStyle(color: Colors.black),
-          ),
-        ),
+        theme: Theme.of(context).extension<TextlyAppbarTheme>(),
         leftSideLeading: const LogoWidget(),
         rightSideLeading: Row(
           children: [
-            if (AuthenticationScope.authenticatedWithProfileOrNullOf(
-                  context,
-                  listen: true,
-                ) ==
-                null)
+            if (!AuthenticationScope.isAuthenticatedWithProfileOf(
+              context,
+              listen: true,
+            ))
               TextButton(
                 child: const Text('SignIn'),
                 onPressed: () async {
@@ -211,11 +202,13 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       navigationRail: SideNavigationMenu(
         fab: const FABWidget(),
-        items: user == null ? unAuthListNavItems : authListNavItems,
+        items:
+            isAuthenticatedWithProfile ? authListNavItems : unAuthListNavItems,
         onTap: (index) {
           _currentIndex = index;
-          final item =
-              (user == null ? unAuthListNavItems : authListNavItems)[index];
+          final item = (isAuthenticatedWithProfile
+              ? authListNavItems
+              : unAuthListNavItems)[index];
           if (item.location != null) {
             if (item.isPush ?? false) {
               context.push(item.location!);
@@ -241,8 +234,9 @@ class _HomeScreenState extends State<HomeScreen> {
             return;
           }
           _currentIndex = index;
-          final item =
-              (user == null ? unAuthListNavItems : authListNavItems)[index];
+          final item = (isAuthenticatedWithProfile
+              ? authListNavItems
+              : unAuthListNavItems)[index];
           if (item.location != null) {
             context.go(item.location!);
           }

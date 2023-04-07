@@ -15,6 +15,7 @@ import 'package:textly/src/common/migration/migration_helper.dart';
 import 'package:textly/src/common/model/app_metadata.dart';
 import 'package:textly/src/feature/auth/data/auth_repo.dart';
 import 'package:textly/src/feature/auth/data/user_data_provider.dart';
+import 'package:textly/src/feature/profile/data/profile_repo.dart';
 import 'package:textly_core/textly_core.dart';
 import 'package:textly_ui/textly_ui.dart';
 
@@ -148,6 +149,12 @@ final Map<
       userDataProvider: store.userDataProvider!,
     );
     return store.copyWith(authRepository: authRepo);
+  },
+  'Creating ProfileRepository': (store) async {
+    final profileRepo = ApiProfileRepository(
+      store.dio!,
+    );
+    return store.copyWith(profileRepository: profileRepo);
   },
   'Migrate app from previous version': (store) async {
     final sharedPrefs = store.sharedPreferences;

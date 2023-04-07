@@ -1,7 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:l/l.dart';
-import 'package:textly_core/textly_core.dart';
+import 'package:textly_core/textly_core.dart'
+    show Profile, ProfileRepository, $ProfileCopyWith;
 
 part 'profile_bloc.freezed.dart';
 
@@ -16,8 +17,7 @@ class ProfileEvent with _$ProfileEvent {
 class ProfileState with _$ProfileState {
   const factory ProfileState.loading() = _LoadingState;
   const factory ProfileState.error({required String message}) = _ErrorState;
-  const factory ProfileState.success({required Profile profile}) =
-      _SuccessState;
+  const factory ProfileState.success(Profile profile) = _SuccessState;
 }
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
@@ -33,7 +33,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
         if (profile != null) {
           l.vvvvvv('Профиль userId:${event.userId} получен');
-          emit(ProfileState.success(profile: profile));
+          emit(ProfileState.success(profile));
         } else {
           l.vvvvvv('Профиль userId:${event.userId} не существует');
           emit(const ProfileState.error(message: 'Profile is not found'));

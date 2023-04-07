@@ -29,7 +29,12 @@ class _AuthDialogState extends State<AuthDialog> {
       contentPadding: const EdgeInsets.all(16),
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      content: BlocBuilder<AuthenticationBLoC, AuthenticationState>(
+      content: BlocConsumer<AuthenticationBLoC, AuthenticationState>(
+        listener: (context, state) {
+          if (state.withProfile) {
+            Navigator.of(context).pop();
+          }
+        },
         builder: (conetxt, state) => state.map(
           error: (state) => const _LoadingAuthDialog(),
           authenticatedWithoutProfile: (state) =>

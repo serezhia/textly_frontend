@@ -38,6 +38,7 @@ dependencies:
   dio: ^5.1.1
   email_validator: ^2.1.17
   pin_code_fields: ^7.4.0
+  shimmer: ^2.0.0
 
 dev_dependencies:
   bloc_test: ^9.1.1

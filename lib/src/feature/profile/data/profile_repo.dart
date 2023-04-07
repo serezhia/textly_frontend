@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'package:dio/dio.dart';
 import 'package:textly/src/common/consts/config_app.dart';
 import 'package:textly_core/textly_core.dart';
@@ -63,12 +65,12 @@ class ApiProfileRepository implements ProfileRepository {
 
   @override
   Future<Profile?> readProfile({required int userId, int? reqUserId}) async {
-    final response = await dio.get<Map<String, Object?>>(
+    final response = await dio.get<dynamic>(
       '$apiDomen/profiles/profile/$userId',
     );
 
     return Profile.fromJson(
-      response.data?['data'] as Map<String, Object?>? ?? {},
+      response.data?['data']!['profile'] as Map<String, Object?>? ?? {},
     );
   }
 

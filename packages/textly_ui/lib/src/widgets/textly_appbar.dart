@@ -1,17 +1,21 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:flutter/material.dart';
+import 'package:textly_ui/src/theme/textly_appbar_theme.dart';
 
 class TextlyAppBar {
   TextlyAppBar({
-    required this.appBar,
+    this.theme,
+    this.centerAppBar,
     this.leftSideLeading,
     this.rightSideLeading,
+    this.heightAppBar,
   });
 
-  final AppBar appBar;
+  final AppBar? centerAppBar;
   final Widget? leftSideLeading;
   final Widget? rightSideLeading;
-  Color get colorAppBar => appBar.backgroundColor ?? Colors.black;
-  double get heightAppBar => appBar.preferredSize.height;
+
+  final TextlyAppbarTheme? theme;
+  final double? heightAppBar;
 }

@@ -44,18 +44,20 @@ class _SideNavigationMenuState extends State<SideNavigationMenu> {
     return LayoutBuilder(
       builder: (context, constraints) => SizedBox(
         width: constraints.maxWidth >= 200 ? 200 : 50,
-        child: Column(
-          children: [
-            ..._createTiles(constraints.maxWidth),
-            if (widget.fab != null)
-              Padding(
-                padding: EdgeInsets.only(
-                  left: constraints.maxWidth >= 200 ? 35 : 0,
-                  top: 30,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              ..._createTiles(constraints.maxWidth),
+              if (widget.fab != null)
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: constraints.maxWidth >= 200 ? 35 : 0,
+                    top: 30,
+                  ),
+                  child: widget.fab,
                 ),
-                child: widget.fab,
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );

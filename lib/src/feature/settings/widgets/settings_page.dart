@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:textly/src/feature/auth/widget/auth_scope.dart';
 import 'package:textly/src/feature/home/widget/default_home_screen_widget.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -8,11 +10,20 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const DefaultHomeScreen(
+    return DefaultHomeScreen(
       title: 'Settings page',
       location: '/settings',
-      child: Placeholder(
-        child: Text('Settings page'),
+      child: Column(
+        children: [
+          if (AuthenticationScope.isAuthenticatedOf(context))
+            ElevatedButton(
+              onPressed: () {
+                AuthenticationScope.logOut(context);
+                context.go('/global');
+              },
+              child: const Text('Exit from account'),
+            )
+        ],
       ),
     );
   }
