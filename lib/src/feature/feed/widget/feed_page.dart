@@ -8,9 +8,7 @@ class FeedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextlyScaffold(
       appBar: TextlyAppBar(
-        centerAppBar: AppBar(
-          title: const Text('Feed'),
-        ),
+        title: const Text('Feed'),
       ),
       body: const Placeholder(
         child: Text('Feed_page'),

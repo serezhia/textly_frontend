@@ -30,5 +30,5 @@ class TextlyScafoldTheme extends ThemeExtension<TextlyScafoldTheme> {
   }
 
   @override
-  String toString() => 'MyColors(backgroundColor: $backgroundColor)';
+  String toString() => 'TextlyScaffold(backgroundColor: $backgroundColor)';
 }

@@ -28,6 +28,11 @@ class DefaultHomeScreen extends StatefulWidget {
 class _DefaultHomeScreenState extends State<DefaultHomeScreen> {
   int _currentIndex = -1;
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
   final buttomListNavItems = [
     UltraNavigationMenuItem(
       lable: 'Global',
@@ -120,53 +125,51 @@ class _DefaultHomeScreenState extends State<DefaultHomeScreen> {
 
     return TextlyScaffold(
       appBar: TextlyAppBar(
-        heightAppBar: 0,
-        centerAppBar: AppBar(
-          automaticallyImplyLeading: false,
-          leading: MediaQuery.of(context).size.width < 600
-              ? BackButton(
-                  onPressed: () {
-                    if (GoRouter.of(context).canPop()) {
-                      GoRouter.of(context).pop();
-                    } else {
-                      context.go('/global');
-                    }
-                  },
-                )
-              : null,
-          backgroundColor: Colors.white,
-          elevation: 0,
-          title: Text(widget.title),
-        ),
+        leading: MediaQuery.of(context).size.width < 600
+            ? BackButton(
+                onPressed: () {
+                  if (GoRouter.of(context).canPop()) {
+                    GoRouter.of(context).pop();
+                  } else {
+                    context.go('/global');
+                  }
+                },
+              )
+            : null,
+        title: Text(widget.title),
         theme: Theme.of(context).extension<TextlyAppbarTheme>(),
-        leftSideLeading: const LogoWidget(),
-        rightSideLeading: Row(
-          children: [
-            if (!AuthenticationScope.isAuthenticatedWithProfileOf(
-              context,
-              listen: true,
-            ))
-              TextButton(
-                child: const Text('SignIn'),
-                onPressed: () async {
-                  await showDialog<void>(
-                    context: context,
-                    builder: (context) => const AuthDialog(),
-                  );
-                },
-              ),
-            if (AuthenticationScope.authenticatedOrNullOf(
-                  context,
-                  listen: true,
-                ) !=
-                null)
-              TextButton(
-                child: const Text('Logout'),
-                onPressed: () async {
-                  AuthenticationScope.logOut(context);
-                },
-              ),
-          ],
+        leftSideLeading: AppBarSideLeading(
+          child: const LogoWidget(),
+        ),
+        rightSideLeading: AppBarSideLeading(
+          child: Row(
+            children: [
+              if (!AuthenticationScope.isAuthenticatedWithProfileOf(
+                context,
+                listen: true,
+              ))
+                TextButton(
+                  child: const Text('SignIn'),
+                  onPressed: () async {
+                    await showDialog<void>(
+                      context: context,
+                      builder: (context) => const AuthDialog(),
+                    );
+                  },
+                ),
+              if (AuthenticationScope.authenticatedOrNullOf(
+                    context,
+                    listen: true,
+                  ) !=
+                  null)
+                TextButton(
+                  child: const Text('Logout'),
+                  onPressed: () async {
+                    AuthenticationScope.logOut(context);
+                  },
+                ),
+            ],
+          ),
         ),
       ),
       theme: Theme.of(context).extension<TextlyScafoldTheme>(),
@@ -176,7 +179,7 @@ class _DefaultHomeScreenState extends State<DefaultHomeScreen> {
           AuthLegoWidget(),
         ],
       ),
-      navigationRail: SideNavigationMenu(
+      sideNavigationMenu: SideNavigationMenu(
         fab: const FABWidget(),
         items:
             isAuthenticatedWithProfile ? authListNavItems : unAuthListNavItems,

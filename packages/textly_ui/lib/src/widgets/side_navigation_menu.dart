@@ -46,6 +46,9 @@ class _SideNavigationMenuState extends State<SideNavigationMenu> {
         width: constraints.maxWidth >= 200 ? 200 : 50,
         child: SingleChildScrollView(
           child: Column(
+            mainAxisAlignment: constraints.maxWidth >= 200
+                ? MainAxisAlignment.start
+                : MainAxisAlignment.center,
             children: [
               ..._createTiles(constraints.maxWidth),
               if (widget.fab != null)

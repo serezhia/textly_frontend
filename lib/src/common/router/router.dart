@@ -15,7 +15,6 @@ import 'package:textly_core/textly_core.dart';
 
 class MainRouter {
   final _rootNavigatorKey = GlobalKey<NavigatorState>();
-  final _globalKey = GlobalKey();
 
   GoRouter get goRouter => GoRouter(
         navigatorKey: _rootNavigatorKey,
@@ -46,7 +45,9 @@ class MainRouter {
                     pageBuilder: (context, state) {
                       return NoTransitionPage(
                         key: state.pageKey,
-                        child: const GlobalPage(),
+                        child: GlobalPage(
+                          key: state.pageKey,
+                        ),
                       );
                     },
                   ),
@@ -88,8 +89,7 @@ class MainRouter {
                     pageBuilder: (context, state) {
                       return NoTransitionPage(
                         key: state.pageKey,
-                        child: ProfilePage(
-                          key: _globalKey,
+                        child: const ProfilePage(
                           userId: null,
                         ),
                       );

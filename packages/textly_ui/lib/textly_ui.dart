@@ -10,5 +10,5 @@ export 'src/widgets/side_navigation_menu.dart' show SideNavigationMenu;
 export 'src/widgets/smart_corner.dart' show SmartCorner;
 export 'src/widgets/switch_widget.dart' show SwitchWidget;
 export 'src/widgets/text_field.dart' show TextlyTextField;
-export 'src/widgets/textly_appbar.dart' show TextlyAppBar;
+export 'src/widgets/textly_appbar.dart' show TextlyAppBar, AppBarSideLeading;
 export 'src/widgets/textly_scaffold.dart' show TextlyScaffold;

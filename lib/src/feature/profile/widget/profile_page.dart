@@ -23,6 +23,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   late final ProfileBloc bloc;
+
   @override
   void initState() {
     bloc = ProfileBloc(
@@ -50,6 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    print('rebuild');
     final isAuthenticatedWithProfile = context
         .watch<AuthenticationBLoC>()
         .state
@@ -65,9 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
           }
           return TextlyScaffold(
             appBar: TextlyAppBar(
-              centerAppBar: AppBar(
-                title: const Text('Profile'),
-              ),
+              title: const Text('Profile'),
             ),
             body: child!,
           );

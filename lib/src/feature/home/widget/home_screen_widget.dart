@@ -162,35 +162,38 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return TextlyScaffold(
       appBar: TextlyAppBar(
+        buildCenter: false,
         theme: Theme.of(context).extension<TextlyAppbarTheme>(),
-        leftSideLeading: const LogoWidget(),
-        rightSideLeading: Row(
-          children: [
-            if (!AuthenticationScope.isAuthenticatedWithProfileOf(
-              context,
-              listen: true,
-            ))
-              TextButton(
-                child: const Text('SignIn'),
-                onPressed: () async {
-                  await showDialog<void>(
-                    context: context,
-                    builder: (context) => const AuthDialog(),
-                  );
-                },
-              ),
-            if (AuthenticationScope.authenticatedOrNullOf(
-                  context,
-                  listen: true,
-                ) !=
-                null)
-              TextButton(
-                child: const Text('Logout'),
-                onPressed: () async {
-                  AuthenticationScope.logOut(context);
-                },
-              ),
-          ],
+        leftSideLeading: AppBarSideLeading(child: const LogoWidget()),
+        rightSideLeading: AppBarSideLeading(
+          child: Row(
+            children: [
+              if (!AuthenticationScope.isAuthenticatedWithProfileOf(
+                context,
+                listen: true,
+              ))
+                TextButton(
+                  child: const Text('SignIn'),
+                  onPressed: () async {
+                    await showDialog<void>(
+                      context: context,
+                      builder: (context) => const AuthDialog(),
+                    );
+                  },
+                ),
+              if (AuthenticationScope.authenticatedOrNullOf(
+                    context,
+                    listen: true,
+                  ) !=
+                  null)
+                TextButton(
+                  child: const Text('Logout'),
+                  onPressed: () async {
+                    AuthenticationScope.logOut(context);
+                  },
+                ),
+            ],
+          ),
         ),
       ),
       theme: Theme.of(context).extension<TextlyScafoldTheme>(),
@@ -200,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
           AuthLegoWidget(),
         ],
       ),
-      navigationRail: SideNavigationMenu(
+      sideNavigationMenu: SideNavigationMenu(
         fab: const FABWidget(),
         items:
             isAuthenticatedWithProfile ? authListNavItems : unAuthListNavItems,
@@ -220,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         currentIndex: _currentIndex,
       ),
-      buttomNavigationBar: ButtomNavigationMenu(
+      buttomNavigationMenu: ButtomNavigationMenu(
         currentIndex: _currentIndex,
         items: buttomListNavItems,
         onTap: (index) async {

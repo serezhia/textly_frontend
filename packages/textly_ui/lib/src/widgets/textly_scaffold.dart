@@ -1,7 +1,4 @@
 // ignore_for_file: public_member_api_docs
-
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:textly_ui/src/consts/consts.dart';
 
@@ -10,23 +7,24 @@ import 'package:textly_ui/textly_ui.dart';
 class TextlyScaffold extends StatefulWidget {
   const TextlyScaffold({
     super.key,
-    required this.body,
     this.appBar,
-    this.buttomNavigationBar,
-    this.navigationRail,
+    this.buttomNavigationMenu,
+    this.sideNavigationMenu,
     this.rightSide,
     this.isRootScreen = false,
+    required this.body,
     this.theme,
   });
 
   final bool isRootScreen;
 
+  final TextlyScafoldTheme? theme;
+
   final TextlyAppBar? appBar;
   final Widget body;
-  final TextlyScafoldTheme? theme;
-  final Widget? buttomNavigationBar;
-  final Widget? navigationRail;
 
+  final ButtomNavigationMenu? buttomNavigationMenu;
+  final SideNavigationMenu? sideNavigationMenu;
   final Widget? rightSide;
 
   @override
@@ -37,59 +35,76 @@ class _TextlyScaffoldState extends State<TextlyScaffold> {
   final unKey = UniqueKey();
   final bodyKey = GlobalKey();
   final rightBarKey = GlobalKey();
+  final scaffoldKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
+    //Default theme
+    final theme = widget.theme ??
+        const TextlyScafoldTheme(
+          backgroundColor: Color(0xFFFAFAFA),
+        );
+
     return Scaffold(
       backgroundColor: widget.theme?.backgroundColor,
       body: LayoutBuilder(
         builder: (context, contraints) {
           if (contraints.maxWidth >= ScreenSize.extraLarge.min) {
             return _XLargeScaffold(
+              scaffoldKey: scaffoldKey,
+              theme: theme,
               isRootScreen: widget.isRootScreen,
               bodyKey: bodyKey,
               appBar: widget.appBar,
               body: widget.body,
-              navigationRail: widget.navigationRail,
+              sideNavigationMenu: widget.sideNavigationMenu,
               rightSide: widget.rightSide,
               rightBarKey: rightBarKey,
             );
           } else if (contraints.maxWidth >= ScreenSize.large.min) {
             return _LargeScaffold(
+              scaffoldKey: scaffoldKey,
+              theme: theme,
               isRootScreen: widget.isRootScreen,
               bodyKey: bodyKey,
               appBar: widget.appBar,
               body: widget.body,
-              navigationRail: widget.navigationRail,
+              sideNavigationMenu: widget.sideNavigationMenu,
               rightSide: widget.rightSide,
               rightBarKey: rightBarKey,
             );
           } else if (contraints.maxWidth >= ScreenSize.medium.min) {
             return _MediumScaffold(
+              scaffoldKey: scaffoldKey,
+              theme: theme,
+              isRootScreen: widget.isRootScreen,
               bodyKey: bodyKey,
               appBar: widget.appBar,
               body: widget.body,
-              navigationRail: widget.navigationRail,
+              sideNavigationMenu: widget.sideNavigationMenu,
               rightSide: widget.rightSide,
               rightBarKey: rightBarKey,
-              isRootScreen: widget.isRootScreen,
             );
           } else if (contraints.maxWidth >= ScreenSize.small.min) {
             return _SmallScaffold(
               bodyKey: bodyKey,
               appBar: widget.appBar,
               body: widget.body,
-              navigationRail: widget.navigationRail,
+              sideNavigationMenu: widget.sideNavigationMenu,
               isRootScreen: widget.isRootScreen,
               rightSide: widget.rightSide,
-              rightSideKey: rightBarKey,
+              rightBarKey: rightBarKey,
+              scaffoldKey: scaffoldKey,
+              theme: theme,
             );
           } else {
             return _XSmallScaffold(
               bodyKey: bodyKey,
               appBar: widget.appBar,
               body: widget.body,
-              bottomNavigationBar: widget.buttomNavigationBar,
+              buttomNavigationMenu: widget.buttomNavigationMenu,
+              theme: theme,
+              scaffoldKey: scaffoldKey,
             );
           }
         },
@@ -102,129 +117,105 @@ class _XLargeScaffold extends StatelessWidget {
   const _XLargeScaffold({
     required this.body,
     required this.bodyKey,
-    this.navigationRail,
+    this.sideNavigationMenu,
     this.rightSide,
     this.appBar,
     required this.rightBarKey,
     required this.isRootScreen,
+    required this.theme,
+    required this.scaffoldKey,
   });
   final GlobalKey bodyKey;
   final GlobalKey rightBarKey;
+  final GlobalKey scaffoldKey;
   final TextlyAppBar? appBar;
   final Widget body;
-  final Widget? navigationRail;
+  final SideNavigationMenu? sideNavigationMenu;
   final Widget? rightSide;
   final bool isRootScreen;
+  final TextlyScafoldTheme theme;
+
   @override
   Widget build(BuildContext context) {
-    if (isRootScreen) {
-      return Stack(
+    final padding = SizedBox(
+      width: 10,
+      child: Column(
         children: [
-          if (isRootScreen && appBar != null)
-            Container(
-              height: appBar?.heightAppBar ??
-                  kAppBarHeight + MediaQuery.of(context).viewPadding.top,
-              color: appBar?.theme?.backgroundColor ?? Colors.white,
-            ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Expanded(child: SizedBox()),
-              if (navigationRail != null)
-                ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: 200,
-                  ),
-                  child: Column(
-                    children: [
-                      if (appBar?.leftSideLeading != null)
-                        SizedBox(
-                          height: appBar?.heightAppBar ??
-                              kAppBarHeight +
-                                  MediaQuery.of(context).viewPadding.top,
-                          child: appBar?.leftSideLeading,
-                        ),
-                      Expanded(child: navigationRail!),
-                    ],
-                  ),
-                ),
-              const SizedBox(width: 10),
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 600),
-                child: Column(
-                  children: [
-                    if (appBar?.centerAppBar != null)
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxHeight: appBar?.heightAppBar ??
-                              kAppBarHeight +
-                                  MediaQuery.of(context).viewPadding.top,
-                        ),
-                        child: appBar!.centerAppBar,
-                      ),
-                    Expanded(
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 600),
-                        child: KeyedSubtree(key: bodyKey, child: body),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 10),
-              if (rightSide != null)
-                ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: 350,
-                  ),
-                  child: Column(
-                    children: [
-                      if (appBar?.rightSideLeading != null)
-                        SizedBox(
-                          height: appBar?.heightAppBar ??
-                              kAppBarHeight +
-                                  MediaQuery.of(context).viewPadding.top,
-                          child: appBar?.rightSideLeading,
-                        ),
-                      Expanded(
-                        child: KeyedSubtree(
-                          key: rightBarKey,
-                          child: rightSide!,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              const Expanded(child: SizedBox(width: 10)),
-            ],
+          Container(
+            height: appBar?.preferredSize.height ?? 0,
+            color: appBar?.theme?.backgroundColor,
           ),
+        ],
+      ),
+    );
+
+    final expandedPadding = Expanded(
+      child: SizedBox(
+        child: Column(
+          children: [
+            Container(
+              height: appBar?.preferredSize.height ?? 0,
+              color: appBar?.theme?.backgroundColor,
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if (isRootScreen) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          expandedPadding,
+          //Left side
+          SizedBox(
+            width: 200,
+            child: Scaffold(
+              appBar: appBar?.leftSideLeading,
+              body: sideNavigationMenu,
+            ),
+          ),
+          //Padding
+          padding,
+          SizedBox(
+            width: 600,
+            child: Scaffold(
+              backgroundColor: theme.backgroundColor,
+              key: scaffoldKey,
+              appBar: appBar?.buildCenter ?? false ? appBar : null,
+              body: KeyedSubtree(
+                key: bodyKey,
+                child: body,
+              ),
+            ),
+          ),
+          //Padding
+          padding,
+          //Right side
+          SizedBox(
+            width: 300,
+            child: Scaffold(
+              appBar: appBar?.rightSideLeading,
+              body: rightSide == null
+                  ? null
+                  : KeyedSubtree(
+                      key: rightBarKey,
+                      child: rightSide!,
+                    ),
+            ),
+          ),
+          expandedPadding,
         ],
       );
     } else {
-      return Column(
-        children: [
-          if (appBar?.centerAppBar != null)
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: appBar?.heightAppBar ??
-                    kAppBarHeight + MediaQuery.of(context).viewPadding.top,
-              ),
-              child: appBar?.centerAppBar,
-            ),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(width: 10),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 600),
-                  child: KeyedSubtree(key: bodyKey, child: body),
-                ),
-                const SizedBox(width: 10),
-              ],
-            ),
-          ),
-        ],
+      return Scaffold(
+        key: scaffoldKey,
+        appBar: appBar?.buildCenter ?? false ? appBar : null,
+        backgroundColor: theme.backgroundColor,
+        body: KeyedSubtree(
+          key: bodyKey,
+          child: body,
+        ),
       );
     }
   }
@@ -233,123 +224,108 @@ class _XLargeScaffold extends StatelessWidget {
 class _LargeScaffold extends StatelessWidget {
   const _LargeScaffold({
     required this.body,
-    this.navigationRail,
+    this.sideNavigationMenu,
     this.rightSide,
     this.appBar,
     required this.bodyKey,
     required this.rightBarKey,
     required this.isRootScreen,
+    required this.theme,
+    required this.scaffoldKey,
   });
 
   final TextlyAppBar? appBar;
   final Widget body;
-  final Widget? navigationRail;
+  final SideNavigationMenu? sideNavigationMenu;
   final GlobalKey bodyKey;
   final Widget? rightSide;
   final GlobalKey rightBarKey;
+  final GlobalKey scaffoldKey;
+
   final bool isRootScreen;
+  final TextlyScafoldTheme theme;
+
   @override
   Widget build(BuildContext context) {
-    if (isRootScreen) {
-      return Stack(
+    final padding = SizedBox(
+      width: 10,
+      child: Column(
         children: [
-          if (isRootScreen && appBar != null)
-            Container(
-              height: appBar?.heightAppBar ??
-                  kAppBarHeight + MediaQuery.of(context).viewPadding.top,
-              color: appBar?.theme?.backgroundColor ?? Colors.white,
-            ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (navigationRail != null)
-                ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: 200,
-                  ),
-                  child: Column(
-                    children: [
-                      if (appBar != null)
-                        SizedBox(
-                          height: appBar?.heightAppBar,
-                          child: appBar?.leftSideLeading,
-                        ),
-                      Expanded(child: navigationRail!),
-                    ],
-                  ),
-                ),
-              const SizedBox(width: 10),
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 600),
-                child: Column(
-                  children: [
-                    if (appBar?.centerAppBar != null)
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxHeight: appBar?.heightAppBar ?? kAppBarHeight,
-                        ),
-                        child: appBar?.centerAppBar,
-                      ),
-                    Expanded(
-                      child: KeyedSubtree(key: bodyKey, child: body),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 10),
-              if (rightSide != null)
-                ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: 300,
-                  ),
-                  child: Column(
-                    children: [
-                      if (appBar?.rightSideLeading != null)
-                        SizedBox(
-                          height: appBar?.heightAppBar ??
-                              kAppBarHeight +
-                                  MediaQuery.of(context).viewPadding.top,
-                          child: appBar?.rightSideLeading,
-                        ),
-                      Expanded(
-                        child: KeyedSubtree(
-                          key: rightBarKey,
-                          child: rightSide!,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              const SizedBox(width: 10),
-            ],
+          Container(
+            height: appBar?.preferredSize.height ?? 0,
+            color: appBar?.theme?.backgroundColor,
           ),
+        ],
+      ),
+    );
+
+    final expandedPadding = Expanded(
+      child: SizedBox(
+        child: Column(
+          children: [
+            Container(
+              height: appBar?.preferredSize.height ?? 0,
+              color: appBar?.theme?.backgroundColor,
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if (isRootScreen) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          expandedPadding,
+          //Left side
+          SizedBox(
+            width: 200,
+            child: Scaffold(
+              appBar: appBar?.leftSideLeading,
+              body: sideNavigationMenu,
+            ),
+          ),
+          //Padding
+          padding,
+          SizedBox(
+            width: 600,
+            child: Scaffold(
+              backgroundColor: theme.backgroundColor,
+              key: scaffoldKey,
+              appBar: appBar?.buildCenter ?? false ? appBar : null,
+              body: KeyedSubtree(
+                key: bodyKey,
+                child: body,
+              ),
+            ),
+          ),
+          //Padding
+          padding,
+          //Right side
+          SizedBox(
+            width: 300,
+            child: Scaffold(
+              appBar: appBar?.rightSideLeading,
+              body: rightSide == null
+                  ? null
+                  : KeyedSubtree(
+                      key: rightBarKey,
+                      child: rightSide!,
+                    ),
+            ),
+          ),
+          expandedPadding,
         ],
       );
     } else {
-      return Column(
-        children: [
-          if (appBar?.centerAppBar != null)
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: appBar?.heightAppBar ??
-                    kAppBarHeight + MediaQuery.of(context).viewPadding.top,
-              ),
-              child: appBar?.centerAppBar,
-            ),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(width: 10),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 600),
-                  child: KeyedSubtree(key: bodyKey, child: body),
-                ),
-                const SizedBox(width: 10),
-              ],
-            ),
-          ),
-        ],
+      return Scaffold(
+        key: scaffoldKey,
+        appBar: appBar?.buildCenter ?? false ? appBar : null,
+        backgroundColor: theme.backgroundColor,
+        body: KeyedSubtree(
+          key: bodyKey,
+          child: body,
+        ),
       );
     }
   }
@@ -357,150 +333,127 @@ class _LargeScaffold extends StatelessWidget {
 
 class _MediumScaffold extends StatelessWidget {
   const _MediumScaffold({
-    required this.body,
     this.appBar,
-    this.navigationRail,
+    required this.body,
+    this.sideNavigationMenu,
     required this.bodyKey,
     this.rightSide,
     required this.rightBarKey,
+    required this.scaffoldKey,
     required this.isRootScreen,
+    required this.theme,
   });
-  final GlobalKey bodyKey;
   final TextlyAppBar? appBar;
   final Widget body;
-  final Widget? navigationRail;
+  final SideNavigationMenu? sideNavigationMenu;
+  final GlobalKey bodyKey;
   final Widget? rightSide;
   final GlobalKey rightBarKey;
+  final GlobalKey scaffoldKey;
+
   final bool isRootScreen;
+  final TextlyScafoldTheme theme;
 
   @override
   Widget build(BuildContext context) {
+    final padding = SizedBox(
+      width: 10,
+      child: Column(
+        children: [
+          Container(
+            height: appBar?.preferredSize.height ?? 0,
+            color: appBar?.theme?.backgroundColor,
+          ),
+        ],
+      ),
+    );
+
+    final expandedPadding = Expanded(
+      child: SizedBox(
+        child: Column(
+          children: [
+            Container(
+              height: appBar?.preferredSize.height ?? 0,
+              color: appBar?.theme?.backgroundColor,
+            ),
+          ],
+        ),
+      ),
+    );
     if (isRootScreen) {
       return LayoutBuilder(
-        builder: (context, constraints) => Stack(
+        builder: (context, constraints) => Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (isRootScreen && appBar != null)
-              Container(
-                height: appBar?.heightAppBar ??
-                    kAppBarHeight + MediaQuery.of(context).viewPadding.top,
-                color: appBar?.theme?.backgroundColor ?? Colors.white,
+            if (constraints.maxWidth < 1150) padding,
+            if (constraints.maxWidth >= 1150) expandedPadding,
+            //Left side
+            SizedBox(
+              width: 200,
+              child: Scaffold(
+                appBar: appBar?.leftSideLeading,
+                body: sideNavigationMenu,
               ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (navigationRail != null)
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxWidth: 200,
-                    ),
-                    child: Column(
-                      children: [
-                        if (appBar != null)
-                          SizedBox(
-                            height: appBar?.heightAppBar ??
-                                kAppBarHeight +
-                                    MediaQuery.of(context).viewPadding.top,
-                            child: appBar?.leftSideLeading,
-                          ),
-                        Expanded(child: navigationRail!),
-                      ],
-                    ),
-                  ),
-                const SizedBox(width: 10),
-                if (constraints.maxWidth >= 1150)
-                  SizedBox(
-                    width: 600,
-                    child: Column(
-                      children: [
-                        if (appBar?.centerAppBar != null)
-                          ConstrainedBox(
-                            constraints: BoxConstraints(
-                              maxHeight: appBar?.heightAppBar ??
-                                  kAppBarHeight +
-                                      MediaQuery.of(context).viewPadding.top,
-                            ),
-                            child: appBar?.centerAppBar,
-                          ),
-                        Expanded(
-                          child: KeyedSubtree(key: bodyKey, child: body),
-                        ),
-                      ],
-                    ),
-                  ),
-                if (constraints.maxWidth < 1150)
-                  Expanded(
-                    child: Column(
-                      children: [
-                        if (appBar?.centerAppBar != null)
-                          ConstrainedBox(
-                            constraints: BoxConstraints(
-                              maxHeight: appBar?.heightAppBar ??
-                                  kAppBarHeight +
-                                      MediaQuery.of(context).viewPadding.top,
-                            ),
-                            child: appBar?.centerAppBar,
-                          ),
-                        Expanded(
-                          child: KeyedSubtree(key: bodyKey, child: body),
-                        ),
-                      ],
-                    ),
-                  ),
-                const SizedBox(width: 10),
-                if (rightSide != null)
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxWidth: 300,
-                    ),
-                    child: Column(
-                      children: [
-                        if (appBar?.rightSideLeading != null)
-                          SizedBox(
-                            height: appBar?.heightAppBar ??
-                                kAppBarHeight +
-                                    MediaQuery.of(context).viewPadding.top,
-                            child: appBar?.rightSideLeading,
-                          ),
-                        Expanded(
-                          child: KeyedSubtree(
-                            key: rightBarKey,
-                            child: rightSide!,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                const SizedBox(width: 10),
-              ],
             ),
+            //Padding
+            padding,
+            //Body
+            if (constraints.maxWidth >= 1150)
+              SizedBox(
+                width: 600,
+                child: Scaffold(
+                  backgroundColor: theme.backgroundColor,
+                  key: scaffoldKey,
+                  appBar: appBar?.buildCenter ?? false ? appBar : null,
+                  body: KeyedSubtree(
+                    key: bodyKey,
+                    child: body,
+                  ),
+                ),
+              ),
+
+            if (constraints.maxWidth < 1150)
+              Expanded(
+                child: Scaffold(
+                  backgroundColor: theme.backgroundColor,
+                  key: scaffoldKey,
+                  appBar: appBar?.buildCenter ?? false ? appBar : null,
+                  body: KeyedSubtree(
+                    key: bodyKey,
+                    child: body,
+                  ),
+                ),
+              ),
+
+            //Padding
+            padding,
+            //Right side
+            SizedBox(
+              width: 300,
+              child: Scaffold(
+                appBar: appBar?.rightSideLeading,
+                body: rightSide == null
+                    ? null
+                    : KeyedSubtree(
+                        key: rightBarKey,
+                        child: rightSide!,
+                      ),
+              ),
+            ),
+            if (constraints.maxWidth < 1150) padding,
+            if (constraints.maxWidth >= 1150) expandedPadding,
           ],
         ),
       );
     } else {
-      return Column(
-        children: [
-          if (appBar?.centerAppBar != null)
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: appBar?.heightAppBar ??
-                    kAppBarHeight + MediaQuery.of(context).viewPadding.top,
-              ),
-              child: appBar?.centerAppBar,
-            ),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(width: 10),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 600),
-                  child: KeyedSubtree(key: bodyKey, child: body),
-                ),
-                const SizedBox(width: 10),
-              ],
-            ),
-          ),
-        ],
+      return Scaffold(
+        key: scaffoldKey,
+        appBar: appBar?.buildCenter ?? false ? appBar : null,
+        backgroundColor: theme.backgroundColor,
+        body: KeyedSubtree(
+          key: bodyKey,
+          child: body,
+        ),
       );
     }
   }
@@ -510,133 +463,112 @@ class _SmallScaffold extends StatelessWidget {
   const _SmallScaffold({
     this.appBar,
     required this.body,
-    this.navigationRail,
+    this.sideNavigationMenu,
     required this.bodyKey,
+    this.rightSide,
+    required this.rightBarKey,
+    required this.scaffoldKey,
     required this.isRootScreen,
-    required this.rightSide,
-    required this.rightSideKey,
+    required this.theme,
   });
   final TextlyAppBar? appBar;
   final Widget body;
-  final Widget? navigationRail;
-  final Widget? rightSide;
-  final GlobalKey rightSideKey;
+  final SideNavigationMenu? sideNavigationMenu;
   final GlobalKey bodyKey;
+  final Widget? rightSide;
+  final GlobalKey rightBarKey;
+  final GlobalKey scaffoldKey;
+
   final bool isRootScreen;
+  final TextlyScafoldTheme theme;
   @override
   Widget build(BuildContext context) {
     if (isRootScreen) {
-      return Stack(
-        children: [
-          if (isRootScreen && appBar != null)
+      final padding = SizedBox(
+        width: 10,
+        child: Column(
+          children: [
             Container(
-              height: appBar?.heightAppBar ??
-                  kAppBarHeight + MediaQuery.of(context).viewPadding.top,
-              color: appBar?.theme?.backgroundColor ?? Colors.white,
+              height: appBar?.preferredSize.height ?? 0,
+              color: appBar?.theme?.backgroundColor,
             ),
-          LayoutBuilder(
-            builder: (context, constraints) => Row(
-              children: [
-                if (navigationRail != null)
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxWidth: 75,
-                    ),
-                    child: Column(
-                      children: [
-                        if (appBar != null)
-                          SizedBox(
-                            height: appBar?.heightAppBar ??
-                                kAppBarHeight +
-                                    MediaQuery.of(context).viewPadding.top,
-                            child: appBar?.leftSideLeading,
-                          ),
-                        Expanded(child: navigationRail!),
-                      ],
-                    ),
-                  ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    children: [
-                      if (appBar?.centerAppBar != null)
-                        ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxHeight: appBar?.heightAppBar ??
-                                kAppBarHeight +
-                                    MediaQuery.of(context).viewPadding.top,
-                          ),
-                          child: appBar?.centerAppBar,
-                        ),
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: KeyedSubtree(key: bodyKey, child: body),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+          ],
+        ),
+      );
+      return LayoutBuilder(
+        builder: (context, constraints) => Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            padding,
+            //Left side
+            SizedBox(
+              width: 50,
+              child: Scaffold(
+                appBar: appBar?.leftSideLeading,
+                body: sideNavigationMenu,
+              ),
+            ),
+            //Padding
+            padding,
+            //Body
+            if (constraints.maxWidth >= 1150)
+              SizedBox(
+                width: 600,
+                child: Scaffold(
+                  backgroundColor: theme.backgroundColor,
+                  key: scaffoldKey,
+                  appBar: appBar?.buildCenter ?? false ? appBar : null,
+                  body: KeyedSubtree(
+                    key: bodyKey,
+                    child: body,
                   ),
                 ),
-                const SizedBox(width: 10),
-                if (rightSide != null)
-                  Visibility(
-                    visible: constraints.maxWidth - 250 >= 500 + 20 + 50,
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(
-                        maxWidth: 250,
-                      ),
-                      child: Column(
-                        children: [
-                          if (appBar != null)
-                            SizedBox(
-                              height: appBar?.heightAppBar ??
-                                  kAppBarHeight +
-                                      MediaQuery.of(context).viewPadding.top,
-                              child: appBar?.rightSideLeading,
-                            ),
-                          Expanded(
-                            child: KeyedSubtree(
-                              key: rightSideKey,
-                              child: rightSide!,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
+              ),
+
+            if (constraints.maxWidth < 1150)
+              Expanded(
+                child: Scaffold(
+                  backgroundColor: theme.backgroundColor,
+                  key: scaffoldKey,
+                  appBar: appBar?.buildCenter ?? false ? appBar : null,
+                  body: KeyedSubtree(
+                    key: bodyKey,
+                    child: body,
                   ),
-                const SizedBox(width: 10),
-              ],
+                ),
+              ),
+
+            //Padding
+            padding,
+            //Right side
+            Visibility(
+              visible: constraints.maxWidth - 250 >= 500 + 20 + 50,
+              child: SizedBox(
+                width: 250,
+                child: Scaffold(
+                  appBar: appBar?.rightSideLeading,
+                  body: rightSide == null
+                      ? null
+                      : KeyedSubtree(
+                          key: rightBarKey,
+                          child: rightSide!,
+                        ),
+                ),
+              ),
             ),
-          ),
-        ],
+            padding,
+          ],
+        ),
       );
     } else {
-      return Column(
-        children: [
-          if (appBar?.centerAppBar != null)
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: appBar?.heightAppBar ??
-                    kAppBarHeight + MediaQuery.of(context).viewPadding.top,
-              ),
-              child: appBar?.centerAppBar,
-            ),
-          Expanded(
-            child: Row(
-              children: [
-                const SizedBox(width: 10),
-                Expanded(
-                  child: KeyedSubtree(key: bodyKey, child: body),
-                ),
-                const SizedBox(width: 10),
-              ],
-            ),
-          ),
-        ],
+      return Scaffold(
+        key: scaffoldKey,
+        appBar: appBar?.buildCenter ?? false ? appBar : null,
+        backgroundColor: theme.backgroundColor,
+        body: KeyedSubtree(
+          key: bodyKey,
+          child: body,
+        ),
       );
     }
   }
@@ -646,53 +578,27 @@ class _XSmallScaffold extends StatelessWidget {
   const _XSmallScaffold({
     required this.bodyKey,
     required this.body,
-    this.bottomNavigationBar,
+    this.buttomNavigationMenu,
     this.appBar,
+    required this.theme,
+    required this.scaffoldKey,
   });
   final GlobalKey bodyKey;
   final TextlyAppBar? appBar;
   final Widget body;
-  final Widget? bottomNavigationBar;
-
+  final ButtomNavigationMenu? buttomNavigationMenu;
+  final TextlyScafoldTheme theme;
+  final GlobalKey scaffoldKey;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        if (appBar != null && appBar!.centerAppBar != null)
-          Column(
-            children: [
-              Container(
-                height: appBar?.heightAppBar ??
-                    appBar!.centerAppBar?.preferredSize.height,
-                color: appBar?.theme?.backgroundColor ?? Colors.white,
-              ),
-              appBar!.centerAppBar!
-            ],
-          ),
-        Builder(
-          builder: (newContext) => MediaQuery.removeViewPadding(
-            removeTop: true,
-            context: newContext,
-            child: Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: KeyedSubtree(key: bodyKey, child: body),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        if (bottomNavigationBar != null)
-          ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: 60 + MediaQuery.of(context).padding.bottom,
-            ),
-            child: bottomNavigationBar,
-          )
-      ],
+    return Scaffold(
+      key: scaffoldKey,
+      appBar: appBar?.buildCenter ?? false ? appBar : null,
+      body: KeyedSubtree(
+        key: bodyKey,
+        child: body,
+      ),
+      bottomNavigationBar: buttomNavigationMenu,
     );
   }
 }

@@ -5,17 +5,25 @@ import 'package:flutter/material.dart';
 @immutable
 class TextlyAppbarTheme extends ThemeExtension<TextlyAppbarTheme> {
   const TextlyAppbarTheme({
-    required this.backgroundColor,
+    this.titleTextStyle,
+    this.backgroundColor = Colors.white,
+    this.toolbarHeight,
   });
 
   final Color? backgroundColor;
+  final double? toolbarHeight;
+  final TextStyle? titleTextStyle;
 
   @override
   TextlyAppbarTheme copyWith({
     Color? backgroundColor,
+    double? toolbarHeight,
+    TextStyle? titleTextStyle,
   }) {
     return TextlyAppbarTheme(
       backgroundColor: backgroundColor ?? this.backgroundColor,
+      toolbarHeight: toolbarHeight ?? this.toolbarHeight,
+      titleTextStyle: titleTextStyle ?? this.titleTextStyle,
     );
   }
 
@@ -31,5 +39,6 @@ class TextlyAppbarTheme extends ThemeExtension<TextlyAppbarTheme> {
   }
 
   @override
-  String toString() => 'MyColors(backgroundColor: $backgroundColor)';
+  String toString() =>
+      '''TextlyAppBarTheme(backgroundColor: $backgroundColor, TextStyle: $titleTextStyle,toolbarHeight: $toolbarHeight )''';
 }
